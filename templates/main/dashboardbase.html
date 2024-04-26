@@ -32,7 +32,7 @@
 
                         // Create a hyperlink element with dynamically fetched link
                         const link = document.createElement('a');
-                        link.href = stock.link; // Assuming 'link' is the key in the API response containing the link
+                        link.href = "/details/"+stock.symbol; // Assuming 'link' is the key in the API response containing the link
                         link.textContent = stock.symbol + ' ' + stock.shortname;
 
                         // Append the hyperlink element to the result item

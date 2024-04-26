@@ -121,8 +121,39 @@ def dashboard(requests):
         }
     return render(requests,"main/dashboard.html",data)
 
-def stockdetails(requests):
-    return render(requests,"main/stocks.html")
+def stockdetails(requests,query):
+    import requests as req
+    if requests.user.is_authenticated:
+        url="https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/"+query+"?merge=false&padTimeSeries=true&period1=1698240600&period2=1714055399&type=quarterlyMarketCap%2CtrailingMarketCap%2CquarterlyEnterpriseValue%2CtrailingEnterpriseValue%2CquarterlyPeRatio%2CtrailingPeRatio%2CquarterlyForwardPeRatio%2CtrailingForwardPeRatio%2CquarterlyPegRatio%2CtrailingPegRatio%2CquarterlyPsRatio%2CtrailingPsRatio%2CquarterlyPbRatio%2CtrailingPbRatio%2CquarterlyEnterprisesValueRevenueRatio%2CtrailingEnterprisesValueRevenueRatio%2CquarterlyEnterprisesValueEBITDARatio%2CtrailingEnterprisesValueEBITDARatio&lang=en-US&region=US"
+        headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
+        response = req.get(url,headers=headers)
+        data = response.json()
+
+        store={}
+
+        for i in (data["timeseries"]["result"]):
+            try:
+                typ=i["meta"]["type"][0]
+                store[typ]=i[typ][0]["reportedValue"]["fmt"]
+            except:
+                continue
+        print("Yes")
+        user=requests.user
+        # print(user.watchlist["symbol"])
+        watchlistsymbols=""
+        for i in user.watchlist["symbol"]:
+            watchlistsymbols=i+","+watchlistsymbols
+        print(watchlistsymbols)
+        data={
+            "username":user.username,
+            "name":user.firstname,
+            "email":user.email,
+            "totalbalance":user.balance,
+            "watchlist":watchlistsymbols,
+            "data":store,
+            "query":query,
+        }
+    return render(requests,"main/details.html",data)
 
 def removewatchlist(requests,symbol):
     # print(symbol)
@@ -135,3 +166,5 @@ def removewatchlist(requests,symbol):
     # remove=users(watchlist=wlist)
     user.save()
     return redirect("dashboard")
+
+

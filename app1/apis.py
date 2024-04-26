@@ -3,9 +3,11 @@
 
 import requests
 from datetime import datetime
-
 from django.http import JsonResponse
 from .models import users
+from .mdate import getdate
+
+from json import dumps
 
 def search(request,query):
     query=query.replace(" ","%20")
@@ -84,3 +86,35 @@ def watchlist(request, query):
 
 # Example usage:
 # watchlist("e", "aapl,goog,meta,msft,sony")
+
+def fetchdetails(request, query):
+    url="https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/"+query+"?merge=false&padTimeSeries=true&period1=1698240600&period2=1714055399&type=quarterlyMarketCap%2CtrailingMarketCap%2CquarterlyEnterpriseValue%2CtrailingEnterpriseValue%2CquarterlyPeRatio%2CtrailingPeRatio%2CquarterlyForwardPeRatio%2CtrailingForwardPeRatio%2CquarterlyPegRatio%2CtrailingPegRatio%2CquarterlyPsRatio%2CtrailingPsRatio%2CquarterlyPbRatio%2CtrailingPbRatio%2CquarterlyEnterprisesValueRevenueRatio%2CtrailingEnterprisesValueRevenueRatio%2CquarterlyEnterprisesValueEBITDARatio%2CtrailingEnterprisesValueEBITDARatio&lang=en-US&region=US"
+    headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
+    response = requests.get(url,headers=headers)
+    data = response.json()
+
+    #print(data["chart"]["result"][0]["meta"])
+
+    store={}
+
+    for i in (data["timeseries"]["result"]):
+        typ=i["meta"]["type"][0]
+        store[typ]=i[typ][0]["reportedValue"]["fmt"]
+    
+    return JsonResponse(store)
+
+def graphdata(request,query):
+    url="https://query2.finance.yahoo.com/v8/finance/chart/"+query+"?period1=1713943800&period2=1714116600&interval=5m&includePrePost=true&events=div%7Csplit%7Cearn&&lang=en-US&region=US"
+    headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
+    response = requests.get(url,headers=headers)
+    data = response.json()
+
+    store={"date":[],"close":[]}
+
+    for i in range(0,len(data["chart"]["result"][0]["timestamp"])):
+        store["date"].append(getdate(data["chart"]["result"][0]["timestamp"][i]))
+        store["close"].append(data["chart"]["result"][0]["indicators"]["quote"][0]["close"][i])
+    
+    return JsonResponse(store)
+
+
