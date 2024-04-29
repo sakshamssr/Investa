@@ -3,6 +3,8 @@ from .models import users
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+import requests as req
+from .mdate import today
 
 # Create your views here.
 def home(requests):
@@ -107,36 +109,41 @@ def dashboard(requests):
     if requests.user.is_authenticated:
         print("Yes")
         user=requests.user
-        # print(user.watchlist["symbol"])
+        print(user)
+        print(user.watchlist)
         watchlistsymbols=""
         for i in user.watchlist["symbol"]:
             watchlistsymbols=i+","+watchlistsymbols
-        print(watchlistsymbols)
+        # print(watchlistsymbols)
         data={
             "username":user.username,
             "name":user.firstname,
             "email":user.email,
-            "totalbalance":user.balance,
+            "totalbalance":round(user.balance,2),
             "watchlist":watchlistsymbols,
         }
     return render(requests,"main/dashboard.html",data)
 
 def stockdetails(requests,query):
-    import requests as req
     if requests.user.is_authenticated:
-        url="https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/"+query+"?merge=false&padTimeSeries=true&period1=1698240600&period2=1714055399&type=quarterlyMarketCap%2CtrailingMarketCap%2CquarterlyEnterpriseValue%2CtrailingEnterpriseValue%2CquarterlyPeRatio%2CtrailingPeRatio%2CquarterlyForwardPeRatio%2CtrailingForwardPeRatio%2CquarterlyPegRatio%2CtrailingPegRatio%2CquarterlyPsRatio%2CtrailingPsRatio%2CquarterlyPbRatio%2CtrailingPbRatio%2CquarterlyEnterprisesValueRevenueRatio%2CtrailingEnterprisesValueRevenueRatio%2CquarterlyEnterprisesValueEBITDARatio%2CtrailingEnterprisesValueEBITDARatio&lang=en-US&region=US"
+        todayepoch=int(today())
+        url="https://query2.finance.yahoo.com/v8/finance/chart/"+query+"?period1="+str(todayepoch-457199)+"&period2="+str(todayepoch)+"&interval=5m&includePrePost=true&events=div%7Csplit%7Cearn&&lang=en-US&region=US"
         headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
         response = req.get(url,headers=headers)
         data = response.json()
 
         store={}
+        data=data["chart"]["result"][0]["meta"]
+        previousclose=data["previousClose"]
 
-        for i in (data["timeseries"]["result"]):
-            try:
-                typ=i["meta"]["type"][0]
-                store[typ]=i[typ][0]["reportedValue"]["fmt"]
-            except:
+        for i in data.keys():
+            if i == ("firstTradeDate") or i == ("regularMarketTime") or i == ("hasPrePostMarketData") or i == ("gmtoffset") or i == ("timezone") or i == ("instrumentType") or i == ("fullExchangeName") or i == ("regularMarketVolume") or i == ("previousClose") or i == ("regularMarketPrice"):
                 continue
+            if i == "scale":
+                break
+            store[i.capitalize()]=data[i]
+            
+        
         print("Yes")
         user=requests.user
         # print(user.watchlist["symbol"])
@@ -148,10 +155,11 @@ def stockdetails(requests,query):
             "username":user.username,
             "name":user.firstname,
             "email":user.email,
-            "totalbalance":user.balance,
+            "totalbalance":round(user.balance,2),
             "watchlist":watchlistsymbols,
             "data":store,
             "query":query,
+            "previousclose":previousclose,
         }
     return render(requests,"main/details.html",data)
 
@@ -168,3 +176,43 @@ def removewatchlist(requests,symbol):
     return redirect("dashboard")
 
 
+def updatestocks(requests):
+    if requests.method == "POST":
+        quantity=int(requests.POST.get("quantity-input"))
+        print(quantity)
+        name=requests.POST.get("symbolname")
+        print(name)
+        currentprice=float(requests.POST.get("currentprice"))
+        print(currentprice)
+        if "buy" in requests.POST:
+            user = users.objects.first()
+            if (name in user.stockbuy.keys()):
+                previousprice=user.stockbuy[name]["quantity"]*user.stockbuy[name]["boughtat"]
+                currentshareprice=quantity*currentprice
+                totalquantity=int(user.stockbuy[name]["quantity"])+int(quantity)
+                averageprice=(previousprice+currentshareprice)/totalquantity
+                user.stockbuy[name]={"quantity":totalquantity, "boughtat":currentprice, "averageprice":averageprice }
+                user.balance=user.balance-float(quantity*currentprice)
+            else:
+            # user.stockbuy={}
+                user.stockbuy[name]={"quantity": quantity ,"boughtat": currentprice, "averageprice": currentprice }
+                user.balance=user.balance-float(quantity*currentprice)
+            user.save()
+            print("Buy")
+        if "sell" in requests.POST:
+            user=users.objects.first()
+            if (name in user.stockbuy.keys()):
+                if user.stockbuy[name]["quantity"] < quantity:
+                    print("Not Enough Shares Holding")
+                elif(  ):
+                    pass
+                else:
+                    user.stockbuy[name].update({"quantity":user.stockbuy[name]["quantity"]-quantity})
+                    user.balance=user.balance+(currentprice*quantity)
+                    user.save()
+                    print("Sell")
+            else:
+                print("Quantity is 0")
+            print("Sell")
+    
+    return(redirect('/'))

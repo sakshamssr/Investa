@@ -68,7 +68,7 @@ def watchlist(request, query):
         for i in range(0,len(data["quoteResponse"]["result"])):
             symbol=data["quoteResponse"]["result"][i]["symbol"]
             link="/removewatchlist/"+symbol
-            store["stocks"].append([symbol,data["quoteResponse"]["result"][i]["regularMarketPrice"],data["quoteResponse"]["result"][i]["regularMarketChangePercent"],link,data["quoteResponse"]["result"][i]["marketState"]])
+            store["stocks"].append([symbol,round(data["quoteResponse"]["result"][i]["regularMarketPrice"],2),round(data["quoteResponse"]["result"][i]["regularMarketChangePercent"],5),link,data["quoteResponse"]["result"][i]["marketState"]])
             # print(store)
         
         # print(store)

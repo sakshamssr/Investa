@@ -53,18 +53,24 @@
             <div class="mx-4 my-4 bg-gray-900 rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                 <div class="flex justify-between">
                     <div>
-                        <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Current Price:
-                            ${{fetchgraph.PreviousClose}}</h5>
+                        <h5 id="currentPrice"
+                            class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Current Price: </h5>
+                        
                         <p class="text-base font-normal text-gray-500 dark:text-gray-400">Price Chart</p>
                     </div>
-                    <!--<div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
-                    23%
-                    <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 13V1m0 0L1 5m4-4 4 4" />
-                    </svg>
-                </div>-->
+                    <div>
+                        <h5 id="previousPrice"
+                            class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Previous Close: ${{previousclose}}</h5>
+                    </div>
+                    <div id="changePercentage"
+                        class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 text-center">
+                        %
+                        <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 13V1m0 0L1 5m4-4 4 4" />
+                        </svg>
+                    </div>
                 </div>
                 <div id="labels-chart" class="px-2.5"></div>
             </div>
@@ -74,6 +80,9 @@
         </div>
         <div class="flex-3 pt-4">
             <div class="flex flex-col">
+                <button type="button" class="text-white bg-[#2557D6] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#2557D6]/50 me-2 mb-2 justify-center">
+                    Add to WatchList.
+                    </button>
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <tbody>
@@ -91,14 +100,16 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="flex flex-row pt-2 ">
-                    <div class="flex">
-                        <form class="max-w-xs mx-auto">
+                <form id="updatestocksform" action="{% url 'updatestocks' %}" method="post">
+                    {% csrf_token %}
+                    <div class="flex flex-row justify-center pt-2 ">
+                        <div class="max-w-xs mx-auto">
                             <label for="quantity-input"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose
                                 quantity:</label>
                             <div class="relative flex items-center max-w-[8rem]">
-                                <button type="button" id="decrement-button" data-input-counter-decrement="quantity-input"
+                                <button type="button" id="decrement-button"
+                                    data-input-counter-decrement="quantity-input"
                                     class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
                                     <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
@@ -106,11 +117,14 @@
                                             stroke-width="2" d="M1 1h16" />
                                     </svg>
                                 </button>
-                                <input type="text" id="quantity-input" data-input-counter
+                                <input type="text" id="symbolname" name="symbolname" class="hidden" value="{{query}}">
+                                <input type="text" id="currentprice" name="currentprice" class="hidden" value="">
+                                <input type="text" id="quantity-input" name="quantity-input" data-input-counter
                                     aria-describedby="helper-text-explanation"
                                     class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="999" required />
-                                <button type="button" id="increment-button" data-input-counter-increment="quantity-input"
+                                <button type="button" id="increment-button"
+                                    data-input-counter-increment="quantity-input"
                                     class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
                                     <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
@@ -120,50 +134,27 @@
                                 </button>
                             </div>
                             <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Please
-                                select a 5 quantity to buy.</p>
-                        </form>
-                    </div>
-                    <div class="flex">
-                        <form class="max-w-xs mx-auto">
-                            <label for="quantity-input"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose
-                                quantity:</label>
-                            <div class="relative flex items-center max-w-[8rem]">
-                                <button type="button" id="decrement-button" data-input-counter-decrement="quantity-input"
-                                    class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                    <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M1 1h16" />
-                                    </svg>
-                                </button>
-                                <input type="text" id="quantity-input" data-input-counter
-                                    aria-describedby="helper-text-explanation"
-                                    class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="999" required />
-                                <button type="button" id="increment-button" data-input-counter-increment="quantity-input"
-                                    class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                    <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M9 1v16M1 9h16" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Please
-                                select a 5 quantity to buy.</p>
-                        </form>
-                    </div>
+                                select quantity to Buy/Sell.</p>
+                        </div>
+                        <div class="flex flex-col justify-center pl-2">
+                            <button type="submit" name="buy" value="buy"
+                                class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-xl px-8 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Buy</button>
+                            <button type="submit" name="sell" value="sell"
+                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xl px-8 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Sell</button>
+                        </div>
+                </form>
 
 
-                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script>
-        fetch("/api/graphdata/{{query}}")
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    function fetchData() {
+        var watchquery = "{{query}}";
+        fetch(`/api/watchlist/${watchquery}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -171,103 +162,151 @@
                 return response.json();
             })
             .then(data => {
-                // Process your JSON data here
-                console.log(data);
+                // Process the fetched data here
+                var currentPriceElement = document.getElementById('currentPrice');
+                var changepercentage = document.getElementById('changePercentage')
 
-                // ApexCharts options and config
-                let options = {
-                    // set the labels option to true to show the labels on the X and Y axis
-                    xaxis: {
-                        show: true,
-                        categories: data.date,
-                        labels: {
-                            show: true,
-                            style: {
-                                fontFamily: "Inter, sans-serif",
-                                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
-                            }
-                        },
-                        axisBorder: {
-                            show: false,
-                        },
-                        axisTicks: {
-                            show: false,
-                        },
-                        tickAmount: Math.ceil(data.date.length / 50),
-                    },
-                    yaxis: {
-                        show: true,
-                        labels: {
-                            show: true,
-                            style: {
-                                fontFamily: "Inter, sans-serif",
-                                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
-                            },
-                            formatter: function (value) {
-                                return '$' + value;
-                            }
+                var form = document.getElementById('updatestocksform');
+                if (currentPriceElement) {
+                    // Extract the Current Price from the fetched data
+                    var stocks = data.stocks;
+                    if (stocks && stocks.length > 0) {
+                        var currentPrice = stocks[0][1]; // Assuming the price is always at index 1
+                        // Update the text content of the element to display the new Current Price
+                        currentPriceElement.textContent = "Current Price: $" + currentPrice;
+                        var changeper = stocks[0][2];
+                        var market = stocks[0][4];
+                        document.getElementById("marketstatus").innerHTML = market;
+                        if(changeper>0){
+                            changepercentage.classList.add('dark:text-green-500');
                         }
-                    },
-                    series: [
-                        {
-                            name: "Close Price",
-                            data: data.close,
-                            color: "#1A56DB",
+                        else{
+                            changepercentage.classList.add('dark:text-red-500');
                         }
-                    ],
-                    chart: {
-                        sparkline: {
-                            enabled: false
-                        },
-                        height: "250%",
-                        width: "100%",
-                        type: "area",
-                        fontFamily: "Inter, sans-serif",
-                        dropShadow: {
-                            enabled: false,
-                        },
-                        toolbar: {
-                            show: false,
-                        },
-                    },
-                    tooltip: {
-                        enabled: true,
-                        x: {
-                            show: false,
-                        },
-                    },
-                    fill: {
-                        type: "gradient",
-                        gradient: {
-                            opacityFrom: 0.55,
-                            opacityTo: 0,
-                            shade: "#1C64F2",
-                            gradientToColors: ["#1C64F2"],
-                        },
-                    },
-                    dataLabels: {
-                        enabled: false,
-                    },
-                    stroke: {
-                        width: 6,
-                    },
-                    legend: {
-                        show: false
-                    },
-                    grid: {
-                        show: false,
-                    },
-                }
+                        changepercentage.textContent = changeper + " %" ;
+                        document.getElementById("currentprice").value=currentPrice;
 
-                if (document.getElementById("labels-chart") && typeof ApexCharts !== 'undefined') {
-                    const chart = new ApexCharts(document.getElementById("labels-chart"), options);
-                    chart.render();
+                    }
                 }
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
             });
-    </script>
+    }
+
+    // Call the fetchData function immediately
+    fetchData();
+
+    // Call the fetchData function every 5 seconds
+    setInterval(fetchData, 5000); // Adjust the interval as needed
+
+</script>
+<script>
+    fetch("/api/graphdata/{{query}}")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Process your JSON data here
+            console.log(data);
+
+            // ApexCharts options and config
+            let options = {
+                // set the labels option to true to show the labels on the X and Y axis
+                xaxis: {
+                    show: true,
+                    categories: data.date,
+                    labels: {
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                        }
+                    },
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    tickAmount: Math.ceil(data.date.length / 50),
+                },
+                yaxis: {
+                    show: true,
+                    labels: {
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                        },
+                        formatter: function (value) {
+                            return '$' + value;
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: "Close Price",
+                        data: data.close,
+                        color: "#1A56DB",
+                    }
+                ],
+                chart: {
+                    sparkline: {
+                        enabled: false
+                    },
+                    height: "250%",
+                    width: "100%",
+                    type: "area",
+                    fontFamily: "Inter, sans-serif",
+                    dropShadow: {
+                        enabled: false,
+                    },
+                    toolbar: {
+                        show: false,
+                    },
+                },
+                tooltip: {
+                    enabled: true,
+                    x: {
+                        show: false,
+                    },
+                },
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        opacityFrom: 0.55,
+                        opacityTo: 0,
+                        shade: "#1C64F2",
+                        gradientToColors: ["#1C64F2"],
+                    },
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    width: 6,
+                },
+                legend: {
+                    show: false
+                },
+                grid: {
+                    show: false,
+                },
+            }
+
+            if (document.getElementById("labels-chart") && typeof ApexCharts !== 'undefined') {
+                const chart = new ApexCharts(document.getElementById("labels-chart"), options);
+                chart.render();
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+</script>
 
 
 </div>
