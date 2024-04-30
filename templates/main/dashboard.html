@@ -120,8 +120,9 @@
             <div class="w-full h-full bg-white rounded-lg shadow dark:bg-gray-800">
                 <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
                     <div>
-                        <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">$12,423</h5>
-                        <p class="text-base font-normal text-gray-500 dark:text-gray-400">Sales this week</p>
+                        <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">${{totalbalance}}
+                        </h5>
+                        <p class="text-base font-normal text-gray-500 dark:text-gray-400"></p>
                     </div>
                     <div
                         class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
@@ -167,109 +168,17 @@
                                         Change
                                     </th>
                                     <th scope="col" class="px-5 py-3">
-                                        Purchase Date
-                                    </th>
-                                    <th scope="col" class="px-3 py-3">
                                         Current Value
+                                    </th>
+                                    <th scope="col" class="px-5 py-3">
+                                        Percent Change
+                                    </th>
+                                    <th scope="col" class="px-5 py-3">
+                                        Edit
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Apple MacBook Pro 17"
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Silver
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Laptop
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $2999
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <a href="#"
-                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Microsoft Surface Pro
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        White
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Laptop PC
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $1999
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <a href="#"
-                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Magic Mouse 2
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Black
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Accessories
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $99
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <a href="#"
-                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Apple MacBook Pro 17"
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Silver
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Laptop
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $2999
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <a href="#"
-                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Microsoft Surface Pro
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        White
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Laptop PC
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $1999
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <a href="#"
-                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
+                            <tbody id="stock-table-body">
                             </tbody>
                         </table>
                     </div>
@@ -317,43 +226,6 @@
                         </div>
                     </div>
                     <div>
-                        <button type="button" data-tooltip-target="data-tooltip" data-tooltip-placement="bottom"
-                            class="hidden sm:inline-flex items-center justify-center text-gray-500 w-8 h-8 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm"><svg
-                                class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 16 18">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M8 1v11m0 0 4-4m-4 4L4 8m11 4v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3" />
-                            </svg><span class="sr-only">Download data</span>
-                        </button>
-                        <div id="data-tooltip" role="tooltip"
-                            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                            Download CSV
-                            <div class="tooltip-arrow" data-popper-arrow></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex" id="devices">
-                        <div class="flex items-center me-4">
-                            <input id="desktop" type="checkbox" value="desktop"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="desktop"
-                                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Desktop</label>
-                        </div>
-                        <div class="flex items-center me-4">
-                            <input id="tablet" type="checkbox" value="tablet"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="tablet"
-                                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tablet</label>
-                        </div>
-                        <div class="flex items-center me-4">
-                            <input id="mobile" type="checkbox" value="mobile"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="mobile"
-                                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Mobile</label>
-                        </div>
                     </div>
                 </div>
 
@@ -364,223 +236,319 @@
         </div>
     </div>
     <script>
-
-
-        const getChartOptions = () => {
-            return {
-                series: [35.1, 23.5, 2.4, 5.4],
-                colors: ["#1C64F2", "#16BDCA", "#FDBA8C", "#E74694"],
-                chart: {
-                    height: 320,
-                    width: "100%",
-                    type: "donut",
-                },
-                stroke: {
-                    colors: ["transparent"],
-                    lineCap: "",
-                },
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            labels: {
-                                show: true,
-                                name: {
-                                    show: true,
-                                    fontFamily: "Inter, sans-serif",
-                                    offsetY: 20,
-                                },
-                                total: {
-                                    showAlways: true,
-                                    show: true,
-                                    label: "Unique visitors",
-                                    fontFamily: "Inter, sans-serif",
-                                    formatter: function (w) {
-                                        const sum = w.globals.seriesTotals.reduce((a, b) => {
-                                            return a + b
-                                        }, 0)
-                                        return '$' + sum + 'k'
+        fetch(`/api/portfoliochart`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const getChartOptions = () => {
+                    return {
+                        series: data.price,
+                        colors: ["#1C64F2", "#16BDCA", "#FDBA8C", "#E74694"],
+                        chart: {
+                            height: 320,
+                            width: "100%",
+                            type: "donut",
+                        },
+                        stroke: {
+                            colors: ["transparent"],
+                            lineCap: "",
+                        },
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    labels: {
+                                        show: true,
+                                        name: {
+                                            show: true,
+                                            fontFamily: "Inter, sans-serif",
+                                            offsetY: 20,
+                                        },
+                                        total: {
+                                            showAlways: true,
+                                            show: true,
+                                            label: "Total Investment",
+                                            fontFamily: "Inter, sans-serif",
+                                            formatter: function (w) {
+                                                const sum = w.globals.seriesTotals.reduce((a, b) => {
+                                                    return a + b
+                                                }, 0)
+                                                return '$' + sum
+                                            },
+                                        },
+                                        value: {
+                                            show: true,
+                                            fontFamily: "Inter, sans-serif",
+                                            offsetY: -20,
+                                            formatter: function (value) {
+                                                return value
+                                            },
+                                        },
                                     },
-                                },
-                                value: {
-                                    show: true,
-                                    fontFamily: "Inter, sans-serif",
-                                    offsetY: -20,
-                                    formatter: function (value) {
-                                        return value + "k"
-                                    },
+                                    size: "80%",
                                 },
                             },
-                            size: "80%",
                         },
-                    },
-                },
-                grid: {
-                    padding: {
-                        top: -2,
-                    },
-                },
-                labels: ["Direct", "Sponsor", "Affiliate", "Email marketing"],
-                dataLabels: {
-                    enabled: false,
-                },
-                legend: {
-                    position: "bottom",
-                    fontFamily: "Inter, sans-serif",
-                },
-                yaxis: {
-                    labels: {
-                        formatter: function (value) {
-                            return value + "k"
+                        grid: {
+                            padding: {
+                                top: -2,
+                            },
                         },
-                    },
-                },
+                        labels: data.name,
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        legend: {
+                            position: "bottom",
+                            fontFamily: "Inter, sans-serif",
+                        },
+                        yaxis: {
+                            labels: {
+                                formatter: function (value) {
+                                    return value
+                                },
+                            },
+                        },
+                        xaxis: {
+                            labels: {
+                                formatter: function (value) {
+                                    return value
+                                },
+                            },
+                            axisTicks: {
+                                show: false,
+                            },
+                            axisBorder: {
+                                show: false,
+                            },
+                        },
+                    }
+                }
+
+                if (document.getElementById("donut-chart") && typeof ApexCharts !== 'undefined') {
+                    const chart = new ApexCharts(document.getElementById("donut-chart"), getChartOptions());
+                    chart.render();
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+
+    </script>
+
+<script>
+    // Array of stock symbols to fetch data for
+    const symbol = "{{stock|escapejs}}";
+
+    var symbols = JSON.parse(symbol.replace(/'/g, '"'));
+
+    // Function to fetch data for each symbol and combine it
+    const fetchDataForSymbols = async () => {
+        // Array to store promises for each fetch operation
+        const promises = symbols.map(symbol => {
+            return fetch(`/api/graphdata/${symbol}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Process data for each symbol here
+                    return {
+                        symbol: symbol,
+                        data: data
+                    };
+                });
+        });
+
+        // Wait for all fetch operations to complete
+        const results = await Promise.all(promises);
+
+        // Process and combine data for all symbols
+        const combinedData = results.reduce((acc, { symbol, data }) => {
+            // Combine data for each symbol as needed
+            acc.date = data.date;
+            acc[symbol] = data.close;
+            return acc;
+        }, { date: [] });
+
+        return combinedData;
+    };
+
+    // Fetch data for all symbols and render the chart
+    fetchDataForSymbols()
+        .then(combinedData => {
+            // Process combined data and render the chart
+            console.log(combinedData);
+
+            // ApexCharts options and config (use combinedData for chart data)
+            let options = {
+                // Set chart options using combinedData
                 xaxis: {
+                    categories: combinedData.date,
                     labels: {
-                        formatter: function (value) {
-                            return value + "k"
-                        },
-                    },
-                    axisTicks: {
-                        show: false,
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                        }
                     },
                     axisBorder: {
                         show: false,
                     },
-                },
-            }
-        }
-
-        if (document.getElementById("donut-chart") && typeof ApexCharts !== 'undefined') {
-            const chart = new ApexCharts(document.getElementById("donut-chart"), getChartOptions());
-            chart.render();
-
-            // Get all the checkboxes by their class name
-            const checkboxes = document.querySelectorAll('#devices input[type="checkbox"]');
-
-            // Function to handle the checkbox change event
-            function handleCheckboxChange(event, chart) {
-                const checkbox = event.target;
-                if (checkbox.checked) {
-                    switch (checkbox.value) {
-                        case 'desktop':
-                            chart.updateSeries([15.1, 22.5, 4.4, 8.4]);
-                            break;
-                        case 'tablet':
-                            chart.updateSeries([25.1, 26.5, 1.4, 3.4]);
-                            break;
-                        case 'mobile':
-                            chart.updateSeries([45.1, 27.5, 8.4, 2.4]);
-                            break;
-                        default:
-                            chart.updateSeries([55.1, 28.5, 1.4, 5.4]);
-                    }
-
-                } else {
-                    chart.updateSeries([35.1, 23.5, 2.4, 5.4]);
-                }
-            }
-
-            // Attach the event listener to each checkbox
-            checkboxes.forEach((checkbox) => {
-                checkbox.addEventListener('change', (event) => handleCheckboxChange(event, chart));
-            });
-        }
-
-
-        const options = {
-            // set the labels option to true to show the labels on the X and Y axis
-            xaxis: {
-                show: true,
-                categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
-                labels: {
-                    show: true,
-                    style: {
-                        fontFamily: "Inter, sans-serif",
-                        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
-                    }
-                },
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false,
-                },
-            },
-            yaxis: {
-                show: true,
-                labels: {
-                    show: true,
-                    style: {
-                        fontFamily: "Inter, sans-serif",
-                        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                    axisTicks: {
+                        show: false,
                     },
-                    formatter: function (value) {
-                        return '$' + value;
+                    tickAmount: Math.ceil(5),
+                },
+                yaxis: {
+                    show: true,
+                    labels: {
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                        },
+                        formatter: function (value) {
+                            return '$' + value;
+                        }
                     }
-                }
-            },
-            series: [
-                {
-                    name: "Developer Edition",
-                    data: [150, 141, 145, 152, 135, 125],
-                    color: "#1A56DB",
                 },
-                {
-                    name: "Designer Edition",
-                    data: [43, 13, 65, 12, 42, 73],
-                    color: "#7E3BF2",
+                series: symbols.map(symbol => {
+                    return {
+                        name: symbol,
+                        data: combinedData[symbol]
+                    };
+                }),
+                chart: {
+                    sparkline: {
+                        enabled: false
+                    },
+                    height: "80%",
+                    width: "100%",
+                    type: "area",
+                    fontFamily: "Inter, sans-serif",
+                    dropShadow: {
+                        enabled: false,
+                    },
+                    toolbar: {
+                        show: false,
+                    },
                 },
-            ],
-            chart: {
-                sparkline: {
-                    enabled: false
+                tooltip: {
+                    enabled: true,
+                    x: {
+                        show: false,
+                    },
                 },
-                height: "75%",
-                width: "100%",
-                type: "area",
-                fontFamily: "Inter, sans-serif",
-                dropShadow: {
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        opacityFrom: 0.55,
+                        opacityTo: 0,
+                        shade: "#1C64F2",
+                        gradientToColors: ["#1C64F2"],
+                    },
+                },
+                dataLabels: {
                     enabled: false,
                 },
-                toolbar: {
+                stroke: {
+                    width: 6,
+                },
+                legend: {
+                    show: true
+                },
+                grid: {
                     show: false,
                 },
-            },
-            tooltip: {
-                enabled: true,
-                x: {
-                    show: false,
-                },
-            },
-            fill: {
-                type: "gradient",
-                gradient: {
-                    opacityFrom: 0.55,
-                    opacityTo: 0,
-                    shade: "#1C64F2",
-                    gradientToColors: ["#1C64F2"],
-                },
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                width: 6,
-            },
-            legend: {
-                show: false
-            },
-            grid: {
-                show: false,
-            },
-        }
+            };
 
-        if (document.getElementById("labels-chart") && typeof ApexCharts !== 'undefined') {
-            const chart = new ApexCharts(document.getElementById("labels-chart"), options);
-            chart.render();
-        }
+            if (document.getElementById("labels-chart") && typeof ApexCharts !== 'undefined') {
+                const chart = new ApexCharts(document.getElementById("labels-chart"), options);
+                chart.render();
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with fetching data:', error);
+        });
+</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch(`/api/portfolio`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const tableBody = document.getElementById('stock-table-body');
 
+                    data.forEach(stock => {
+                        const row = document.createElement('tr');
+                        row.className = 'bg-white border-b dark:bg-gray-800 dark:border-gray-700';
+
+                        const symbolCell = document.createElement('th');
+                        symbolCell.className = 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white';
+                        symbolCell.textContent = stock.symbol[0]; // Assuming symbol is always a list with one element
+
+                        const quantityCell = document.createElement('td');
+                        quantityCell.className = 'px-6 py-4';
+                        quantityCell.textContent = stock.quantity[0]; // Assuming quantity is always a list with one element
+
+                        const boughtAtCell = document.createElement('td');
+                        boughtAtCell.className = 'px-6 py-4';
+                        boughtAtCell.textContent = stock.boughtat[0]; // Assuming boughtat is always a list with one element
+
+                        const averagePriceCell = document.createElement('td');
+                        averagePriceCell.className = 'px-6 py-4';
+                        averagePriceCell.textContent = stock.averageprice[0]; // Assuming averageprice is always a list with one element
+
+                        const currentPriceCell = document.createElement('td');
+                        currentPriceCell.className = 'px-6 py-4';
+                        currentPriceCell.textContent = stock.currentprice;
+
+                        const percentChangeCell = document.createElement('td');
+                        percentChangeCell.className = 'px-6 py-4';
+                        if (stock.percentchange > 0) {
+                            percentChangeCell.classList.add("text-green-500")
+                        }
+                        else {
+                            percentChangeCell.classList.add("text-red-600")
+                        }
+                        percentChangeCell.textContent = stock.percentchange;
+
+                        const actionsCell = document.createElement('td');
+                        actionsCell.className = 'px-6 py-4';
+                        const editLink = document.createElement('a');
+                        editLink.href = 'details/' + stock.symbol;
+                        editLink.className = 'font-medium text-blue-600 dark:text-blue-500 hover:underline';
+                        editLink.textContent = 'Edit';
+                        actionsCell.appendChild(editLink);
+
+                        row.appendChild(symbolCell);
+                        row.appendChild(quantityCell);
+                        row.appendChild(boughtAtCell);
+                        row.appendChild(averagePriceCell);
+                        row.appendChild(currentPriceCell);
+                        row.appendChild(percentChangeCell);
+                        row.appendChild(actionsCell);
+
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
     </script>
+
+
 </div>
 
 {% endblock %}

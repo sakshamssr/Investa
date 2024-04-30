@@ -39,7 +39,7 @@ def user_login(requests):
                 # user=authenticate(requests,username=uname,password=pword)
                 # print(user)
                 auth_login(requests,users.objects.get(username=uname))
-                return redirect("logout")
+                return redirect("dashboard")
             else:
                 data={"isusername":"hidden","ispasswordcorrect":"visible"}
                 return render(requests,"login/login.html",data)
@@ -83,30 +83,27 @@ def createuser(requests):
             adduser=users(username=uname,firstname=fname,lastname=lname,email=mail,password=pword,watchlist={"symbol":["sony","msft","meta","goog","aapl"]})
             adduser.save()
             return redirect("login")
-    
-    data={"isusername":"hidden","isemail":"hidden"}
-    return render(requests,"login/signup.html",data)
+    else:
+        return redirect("login")
 
 # def logout(requests):
 #     auth_logout(requests)
 #     return HttpResponse("Logout!!")
 
 def logout(requests):
-    if requests.user.is_authenticated:
-        # User is logged in
-        user = requests.user
-        # Your view logic here
-        return HttpResponse(user.email)
-    else:
-        # User is not logged in
-        user = None
-        # Handle the case when user is not logged in
-        return HttpResponse("No!!")
-    return render(requests, 'template.html', {'user': user})
+    auth_logout(requests)
+    return HttpResponse("Logout!!")
 
 
 def dashboard(requests):
     if requests.user.is_authenticated:
+        user = users.objects.first()
+        stockname=user.stockbuy.keys()
+        stock=[]
+        price=[]
+        for i in stockname:
+            stock.append(i)
+            price.append(user.stockbuy[i]["boughtat"]*user.stockbuy[i]["quantity"])
         print("Yes")
         user=requests.user
         print(user)
@@ -114,6 +111,7 @@ def dashboard(requests):
         watchlistsymbols=""
         for i in user.watchlist["symbol"]:
             watchlistsymbols=i+","+watchlistsymbols
+        
         # print(watchlistsymbols)
         data={
             "username":user.username,
@@ -121,8 +119,12 @@ def dashboard(requests):
             "email":user.email,
             "totalbalance":round(user.balance,2),
             "watchlist":watchlistsymbols,
+            "stock":list(stockname),
+            "price":price,
         }
-    return render(requests,"main/dashboard.html",data)
+        return render(requests,"main/dashboard.html",data)
+    else:
+        return redirect("login")
 
 def stockdetails(requests,query):
     if requests.user.is_authenticated:
@@ -161,7 +163,9 @@ def stockdetails(requests,query):
             "query":query,
             "previousclose":previousclose,
         }
-    return render(requests,"main/details.html",data)
+        return render(requests,"main/details.html",data)
+    else:
+        return redirect("login")
 
 def removewatchlist(requests,symbol):
     # print(symbol)
@@ -191,11 +195,11 @@ def updatestocks(requests):
                 currentshareprice=quantity*currentprice
                 totalquantity=int(user.stockbuy[name]["quantity"])+int(quantity)
                 averageprice=(previousprice+currentshareprice)/totalquantity
-                user.stockbuy[name]={"quantity":totalquantity, "boughtat":currentprice, "averageprice":averageprice }
+                user.stockbuy[name]={"quantity":totalquantity, "boughtat":currentprice, "averageprice":averageprice,"purchaseat":"date" }
                 user.balance=user.balance-float(quantity*currentprice)
             else:
             # user.stockbuy={}
-                user.stockbuy[name]={"quantity": quantity ,"boughtat": currentprice, "averageprice": currentprice }
+                user.stockbuy[name]={"quantity": quantity ,"boughtat": currentprice, "averageprice": currentprice,"purchaseat":"date" }
                 user.balance=user.balance-float(quantity*currentprice)
             user.save()
             print("Buy")
@@ -204,8 +208,11 @@ def updatestocks(requests):
             if (name in user.stockbuy.keys()):
                 if user.stockbuy[name]["quantity"] < quantity:
                     print("Not Enough Shares Holding")
-                elif(  ):
-                    pass
+                if user.stockbuy[name]["quantity"] == quantity:
+                    print("Here")
+                    user.stockbuy.pop(name)
+                    user.balance=user.balance+(currentprice*quantity)
+                    user.save()
                 else:
                     user.stockbuy[name].update({"quantity":user.stockbuy[name]["quantity"]-quantity})
                     user.balance=user.balance+(currentprice*quantity)
@@ -215,4 +222,38 @@ def updatestocks(requests):
                 print("Quantity is 0")
             print("Sell")
     
-    return(redirect('/'))
+        return(redirect('dashboard'))
+    else:
+        return render(requests,"login/login.html")
+
+def user_portfolio(requests):
+
+    if requests.user.is_authenticated:
+        user = users.objects.first()
+        stockname=user.stockbuy.keys()
+        stock=[]
+        price=[]
+        for i in stockname:
+            stock.append(i)
+            price.append(user.stockbuy[i]["boughtat"]*user.stockbuy[i]["quantity"])
+        print("Yes")
+        user=requests.user
+        print(user)
+        print(user.watchlist)
+        watchlistsymbols=""
+        for i in user.watchlist["symbol"]:
+            watchlistsymbols=i+","+watchlistsymbols
+        
+        # print(watchlistsymbols)
+        data={
+            "username":user.username,
+            "name":user.firstname,
+            "email":user.email,
+            "totalbalance":round(user.balance,2),
+            "watchlist":watchlistsymbols,
+            "stock":stock,
+            "price":price,
+        }
+        return render(requests,"main/portfolio.html",data)
+    else:
+        return redirect("login")
