@@ -54,13 +54,15 @@
                 <div class="flex justify-between">
                     <div>
                         <h5 id="currentPrice"
-                            class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Current Price: </h5>
-                        
+                            class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Current Price:
+                        </h5>
+
                         <p class="text-base font-normal text-gray-500 dark:text-gray-400">Price Chart</p>
                     </div>
                     <div>
                         <h5 id="previousPrice"
-                            class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Previous Close: ${{previousclose}}</h5>
+                            class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Previous Close:
+                            ${{previousclose}}</h5>
                     </div>
                     <div id="changePercentage"
                         class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 text-center">
@@ -80,9 +82,10 @@
         </div>
         <div class="flex-3 pt-4">
             <div class="flex flex-col">
-                <button type="button" class="text-white bg-[#2557D6] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#2557D6]/50 me-2 mb-2 justify-center">
+                <button type="button"
+                    class="text-white bg-[#2557D6] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#2557D6]/50 me-2 mb-2 justify-center">
                     Add to WatchList.
-                    </button>
+                </button>
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <tbody>
@@ -99,6 +102,29 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                </div>
+                <div id="alert-2"
+                    class="hidden flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                    role="alert">
+                    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div class="ms-3 text-sm font-medium">
+                        Don't have enough Funds.
+                    </div>
+                    <button type="button"
+                        class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+                        data-dismiss-target="#alert-2" aria-label="Close">
+                        <span class="sr-only">Close</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
                 </div>
                 <form id="updatestocksform" action="{% url 'updatestocks' %}" method="post">
                     {% csrf_token %}
@@ -177,14 +203,14 @@
                         var changeper = stocks[0][2];
                         var market = stocks[0][4];
                         document.getElementById("marketstatus").innerHTML = market;
-                        if(changeper>0){
+                        if (changeper > 0) {
                             changepercentage.classList.add('dark:text-green-500');
                         }
-                        else{
+                        else {
                             changepercentage.classList.add('dark:text-red-500');
                         }
-                        changepercentage.textContent = changeper + " %" ;
-                        document.getElementById("currentprice").value=currentPrice;
+                        changepercentage.textContent = changeper + " %";
+                        document.getElementById("currentprice").value = currentPrice;
 
                     }
                 }

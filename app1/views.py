@@ -190,6 +190,12 @@ def updatestocks(requests):
         print(currentprice)
         if "buy" in requests.POST:
             user = users.objects.first()
+            if(quantity==0):
+                return render(requests,"main/error.html")
+                # return redirect("Quantity Can not be 0")
+            if(currentprice*quantity)>user.balance:
+                return render(requests,"main/error.html")
+                # return HttpResponse("Not Sufficient Balance")
             if (name in user.stockbuy.keys()):
                 previousprice=user.stockbuy[name]["quantity"]*user.stockbuy[name]["boughtat"]
                 currentshareprice=quantity*currentprice
@@ -206,8 +212,9 @@ def updatestocks(requests):
         if "sell" in requests.POST:
             user=users.objects.first()
             if (name in user.stockbuy.keys()):
-                if user.stockbuy[name]["quantity"] < quantity:
-                    print("Not Enough Shares Holding")
+                if quantity > user.stockbuy[name]["quantity"]:
+                    return render(requests,"main/error.html")
+                    # print("Not Enough Shares Holding")
                 if user.stockbuy[name]["quantity"] == quantity:
                     print("Here")
                     user.stockbuy.pop(name)
@@ -255,5 +262,36 @@ def user_portfolio(requests):
             "price":price,
         }
         return render(requests,"main/portfolio.html",data)
+    else:
+        return redirect("login")
+
+def errorpage(requests):
+    if requests.user.is_authenticated:
+        user = users.objects.first()
+        stockname=user.stockbuy.keys()
+        stock=[]
+        price=[]
+        for i in stockname:
+            stock.append(i)
+            price.append(user.stockbuy[i]["boughtat"]*user.stockbuy[i]["quantity"])
+        print("Yes")
+        user=requests.user
+        print(user)
+        print(user.watchlist)
+        watchlistsymbols=""
+        for i in user.watchlist["symbol"]:
+            watchlistsymbols=i+","+watchlistsymbols
+        
+        # print(watchlistsymbols)
+        data={
+            "username":user.username,
+            "name":user.firstname,
+            "email":user.email,
+            "totalbalance":round(user.balance,2),
+            "watchlist":watchlistsymbols,
+            "stock":stock,
+            "price":price,
+        }
+        return render(requests,"main/error.html",data)
     else:
         return redirect("login")
