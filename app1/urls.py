@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import home,signup,user_login,createuser,logout,dashboard,stockdetails,removewatchlist,updatestocks,user_portfolio,errorpage
+from .views import home,signup,user_login,createuser,logout,dashboard,stockdetails,removewatchlist,updatestocks,user_portfolio,errorpage,settings
 
-from .apis import search,watchlist,fetchdetails,graphdata,portfolio,portfoliochart
+from .apis import search,watchlist,fetchdetails,graphdata,portfolio,portfoliochart,income
 
 urlpatterns = [
     path('',home,name="home"),
@@ -15,10 +15,12 @@ urlpatterns = [
     path('portfolio',user_portfolio,name="user_portfolio"),
     path('updatestocks',updatestocks,name="updatestocks"),
     path('errorpage',errorpage,name="errorpage"),
+    path('settings',settings,name="settings"),
     path('api/search/<str:query>',search,name="search"),
     path('api/watchlist/<str:query>',watchlist,name="watchlist"),
     path('api/fetchdetails/<str:query>',fetchdetails,name="fetchdetails"),
-    path('api/graphdata/<str:query>',graphdata,name="graphdata"),
+    path('api/graphdata/<str:query>/<str:start>/<str:end>',graphdata,name="graphdata"),
     path('api/portfolio',portfolio,name="portfolio"),
     path('api/portfoliochart',portfoliochart,name="portfoliochart"),
+    path('api/incomecalculate',income,name="income"),
 ]

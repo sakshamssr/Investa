@@ -94,8 +94,7 @@ def logout(requests):
     auth_logout(requests)
     return HttpResponse("Logout!!")
 
-
-def dashboard(requests):
+def user_a(requests):
     if requests.user.is_authenticated:
         user = users.objects.first()
         stockname=user.stockbuy.keys()
@@ -121,7 +120,14 @@ def dashboard(requests):
             "watchlist":watchlistsymbols,
             "stock":list(stockname),
             "price":price,
+            "start":today()-52000,
+            "end":today(),
         }
+        return data
+
+def dashboard(requests):
+    if requests.user.is_authenticated:
+        data = user_a(requests)
         return render(requests,"main/dashboard.html",data)
     else:
         return redirect("login")
@@ -129,6 +135,8 @@ def dashboard(requests):
 def stockdetails(requests,query):
     if requests.user.is_authenticated:
         todayepoch=int(today())
+        start=str(todayepoch-457199)
+        end=str(todayepoch)
         url="https://query2.finance.yahoo.com/v8/finance/chart/"+query+"?period1="+str(todayepoch-457199)+"&period2="+str(todayepoch)+"&interval=5m&includePrePost=true&events=div%7Csplit%7Cearn&&lang=en-US&region=US"
         headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
         response = req.get(url,headers=headers)
@@ -152,7 +160,7 @@ def stockdetails(requests,query):
         watchlistsymbols=""
         for i in user.watchlist["symbol"]:
             watchlistsymbols=i+","+watchlistsymbols
-        print(watchlistsymbols)
+        # print(watchlistsymbols)
         data={
             "username":user.username,
             "name":user.firstname,
@@ -162,6 +170,8 @@ def stockdetails(requests,query):
             "data":store,
             "query":query,
             "previousclose":previousclose,
+            "start":start,
+            "end":end,
         }
         return render(requests,"main/details.html",data)
     else:
@@ -260,6 +270,8 @@ def user_portfolio(requests):
             "watchlist":watchlistsymbols,
             "stock":stock,
             "price":price,
+            "start":today()-70000,
+            "end":today(),
         }
         return render(requests,"main/portfolio.html",data)
     else:
@@ -295,3 +307,8 @@ def errorpage(requests):
         return render(requests,"main/error.html",data)
     else:
         return redirect("login")
+
+def settings(requests):
+    if requests.user.is_authenticated:
+        data = user_a(requests)
+    return render(requests,"main/settings.html",data)

@@ -5,7 +5,7 @@ import requests
 from datetime import datetime
 from django.http import JsonResponse,HttpResponse
 from .models import users
-from .mdate import getdate
+from .mdate import getdate,today
 
 from json import dumps
 
@@ -91,9 +91,10 @@ def fetchdetails(request, query):
     
     return JsonResponse(store)
 
-def graphdata(request,query):
-    url="https://query2.finance.yahoo.com/v8/finance/chart/"+query+"?period1=1713943800&period2=1714116600&interval=5m&includePrePost=true&events=div%7Csplit%7Cearn&&lang=en-US&region=US"
+def graphdata(request,query,start,end):
+    url="https://query2.finance.yahoo.com/v8/finance/chart/"+query+"?period1="+str(start)+"&period2="+str(end)+"&interval=5m&includePrePost=true&events=div%7Csplit%7Cearn&&lang=en-US&region=US"
     headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
+    print(url)
     response = requests.get(url,headers=headers)
     data = response.json()
 
@@ -114,8 +115,9 @@ def portfolio(request):
     print(name[0])
     print(name)
     stocksname=""
-    for i in name:
-        stocksname=i+","+stocksname
+    for i in range(len(name)-1,-1,-1):
+        print(i)
+        stocksname=name[i]+","+stocksname
     print(stocksname)
     store=[]
     i=0
@@ -141,3 +143,29 @@ def portfoliochart(requests):
 
     store={"name":name,"price":price}
     return JsonResponse(store)
+
+def income(request):
+    user=users.objects.first()
+    stocks=user.stockbuy
+    price=[]
+    name=list(stocks.keys())
+    stocksname=""
+    for i in range(len(name)-1,-1,-1):
+        print(i)
+        stocksname=name[i]+","+stocksname
+    print(stocksname)
+    print(name)
+    url="http://127.0.0.1:8000/api/watchlist/"+stocksname
+    headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
+    response = requests.get(url,headers=headers)
+    data = response.json()
+    storepl=0
+    print(data["stocks"][0])
+    for i in range(0,len(name)):
+        investedamount=user.stockbuy[name[i]]["averageprice"]*user.stockbuy[name[i]]["quantity"]
+        currentamount=data["stocks"][i][1]*user.stockbuy[name[i]]["quantity"]
+        print("investedamount",investedamount)
+        print("Current Amount",currentamount)
+        pl=currentamount-investedamount
+        storepl=storepl+round(pl,2)
+    return HttpResponse(round(storepl,2))

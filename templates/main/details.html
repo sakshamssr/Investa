@@ -228,7 +228,9 @@
 
 </script>
 <script>
-    fetch("/api/graphdata/{{query}}")
+    const start = "{{start|escapejs}}"
+    const end = "{{end|escapejs}}"
+    fetch(`/api/graphdata/{{query}}/${start}/${end}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');

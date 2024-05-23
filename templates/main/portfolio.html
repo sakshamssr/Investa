@@ -179,6 +179,8 @@
 <script>
     // Array of stock symbols to fetch data for
     const symbol = "{{stock|escapejs}}";
+    const start = "{{start|escapejs}}";
+    const end = "{{end|escapejs}}";
 
     var symbols = JSON.parse(symbol.replace(/'/g, '"'));
 
@@ -186,7 +188,7 @@
     const fetchDataForSymbols = async () => {
         // Array to store promises for each fetch operation
         const promises = symbols.map(symbol => {
-            return fetch(`/api/graphdata/${symbol}`)
+            return fetch(`/api/graphdata/${symbol}/${start}/${end}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -240,10 +242,13 @@
                     axisTicks: {
                         show: false,
                     },
-                    tickAmount: Math.ceil(10),
+                    tickAmount: {
+                        show:false,
+                    },
                 },
                 yaxis: {
                     show: true,
+                    min:50,
                     labels: {
                         show: true,
                         style: {
@@ -343,7 +348,7 @@
         <div class="flex h-96 w-full rounded bg-gray-50 dark:bg-gray-800 col-span-2 pl-2">
             <div class="flex flex-col h-full pt-2">
                 <div class="flex h-1/3 w-full dark:bg-gray-800 pl-2">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Protfolio :</h5>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Portfolio :</h5>
                     <!-- <p class="font-normal text-xl text-gray-700 dark:text-gray-300">: {{name}}</p> -->
                 </div>
                 <div class="flex items-center justify-center h-full w-full">
