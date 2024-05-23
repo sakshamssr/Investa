@@ -151,7 +151,7 @@ def income(request):
     name=list(stocks.keys())
     stocksname=""
     for i in range(len(name)-1,-1,-1):
-        print(i)
+        # print(i)
         stocksname=name[i]+","+stocksname
     print(stocksname)
     print(name)
@@ -164,8 +164,8 @@ def income(request):
     for i in range(0,len(name)):
         investedamount=user.stockbuy[name[i]]["averageprice"]*user.stockbuy[name[i]]["quantity"]
         currentamount=data["stocks"][i][1]*user.stockbuy[name[i]]["quantity"]
-        print("investedamount",investedamount)
-        print("Current Amount",currentamount)
+        # print("investedamount",investedamount)
+        # print("Current Amount",currentamount)
         pl=currentamount-investedamount
         storepl=storepl+round(pl,2)
     return HttpResponse(round(storepl,2))

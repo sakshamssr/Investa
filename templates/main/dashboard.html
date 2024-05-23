@@ -3,9 +3,148 @@
 {% block dashboard %}
 
 <script>
+    // Array of stock symbols to fetch data for
+    const symbol = "{{stocklist|escapejs}}";
+    const start = "{{start|escapejs}}";
+    const end = "{{end|escapejs}}";
+
+    var symbols = JSON.parse(symbol.replace(/'/g, '"'));
+
+    // Function to fetch data for each symbol and combine it
+    const fetchDataForSymbols = async () => {
+        // Array to store promises for each fetch operation
+        const promises = symbols.map(symbol => {
+            return fetch(`/api/graphdata/${symbol}/${start}/${end}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Process data for each symbol here
+                    return {
+                        symbol: symbol,
+                        data: data
+                    };
+                });
+        });
+
+        // Wait for all fetch operations to complete
+        const results = await Promise.all(promises);
+
+        // Process and combine data for all symbols
+        const combinedData = results.reduce((acc, { symbol, data }) => {
+            // Combine data for each symbol as needed
+            acc.date = data.date;
+            acc[symbol] = data.close;
+            return acc;
+        }, { date: [] });
+
+        console.log(combinedData);
+        return combinedData;
+    };
+
+    // Initialize or update the chart with new data
+    let chart;
+    const initializeChart = (symbol, combinedData) => {
+        const data = combinedData[symbol];
+
+        const options = {
+            xaxis: {
+                categories: combinedData.date,
+                labels: {
+                    show: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                    }
+                },
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: true,
+                },
+                tickAmount: {
+                    show: false,
+                },
+            },
+            yaxis: {
+                show: true,
+                labels: {
+                    show: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                    },
+                    formatter: function (value) {
+                        return '$' + value;
+                    }
+                }
+            },
+            series: [{
+                name: symbol,
+                data: data
+            }],
+            chart: {
+                height: "83%",
+                maxWidth: "100%",
+                type: "line",
+                fontFamily: "Inter, sans-serif",
+                dropShadow: {
+                    enabled: false,
+                },
+                toolbar: {
+                    show: false,
+                },
+            },
+            tooltip: {
+                enabled: true,
+                x: {
+                    show: false,
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                width: 6,
+            },
+            grid: {
+                show: true,
+                strokeDashArray: 4,
+                padding: {
+                    left: 2,
+                    right: 2,
+                    top: -26
+                },
+            },
+        };
+
+        if (chart) {
+            chart.updateOptions(options);
+        } else {
+            chart = new ApexCharts(document.getElementById("labels-chart"), options);
+            chart.render();
+        }
+    };
+
+    // Fetch data for all symbols and render the initial chart
+    let combinedDataCache;
+    fetchDataForSymbols()
+        .then(combinedData => {
+            combinedDataCache = combinedData;
+            // Initialize the chart with the first symbol by default
+            initializeChart(symbols[0], combinedData);
+        })
+        .catch(error => {
+            console.error('There was a problem with fetching data:', error);
+        });
+
+    // Function to fetch and render the table data
     function fetchData() {
-        var watchquery = "{{watchlist}}"
-        // console.log(watchquery)
+        var watchquery = "{{watchlist}}";
         fetch(`/api/watchlist/${watchquery}`)
             .then(response => {
                 if (!response.ok) {
@@ -14,11 +153,8 @@
                 return response.json();
             })
             .then(data => {
-                // Process the fetched data here
                 const stocksData = data;
                 const stocksTableBody = document.getElementById('stocksTableBody');
-
-
 
                 // Clear any existing rows
                 stocksTableBody.innerHTML = '';
@@ -34,19 +170,18 @@
                     const symbolCell = document.createElement('th');
                     symbolCell.scope = 'row';
                     symbolCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white');
-                    symbolCell.textContent = symbol;
+                    const symbolButton = document.createElement('button');
+                    symbolButton.classList.add('symbol-button');
+                    symbolButton.textContent = symbol;
+                    symbolButton.addEventListener('click', () => initializeChart(symbol, combinedDataCache));
+                    symbolCell.appendChild(symbolButton);
 
                     const priceCell = document.createElement('td');
                     priceCell.classList.add('px-6', 'py-4');
                     priceCell.textContent = price;
 
                     const changeCell = document.createElement('td');
-                    if (change > 0) {
-                        changeCell.classList.add('px-6', 'py-4', 'text-green-500');
-                    }
-                    else {
-                        changeCell.classList.add('px-6', 'py-4', 'text-red-600');
-                    }
+                    changeCell.classList.add('px-6', 'py-4', change > 0 ? 'text-green-500' : 'text-red-600');
                     changeCell.textContent = change;
 
                     const actionCell = document.createElement('td');
@@ -339,7 +474,7 @@
 
     </script>
 
-    <script>
+    <!-- <script>
         // Array of stock symbols to fetch data for
         const symbol = "{{stock|escapejs}}";
         const start = "{{start|escapejs}}"
@@ -378,6 +513,7 @@
                 return acc;
             }, { date: [] });
 
+            console.log(combinedData);
             return combinedData;
         };
 
@@ -411,10 +547,7 @@
                     },
                     yaxis: {
                         show: true,
-                        min: 0,  // Set the minimum value of y-axis to 0
-                    max: 1000, // Set the maximum value to 1000
-                    tickAmount: 100,  // Set the number of ticks on the y-axis
-                    forceNiceScale: true,  // Ensure nice scale intervals
+                        min: 0,
                         labels: {
                             show: true,
                             style: {
@@ -475,7 +608,7 @@
             .catch(error => {
                 console.error('There was a problem with fetching data:', error);
             });
-    </script>
+    </script> -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             fetch(`/api/portfolio`)

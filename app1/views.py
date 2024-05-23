@@ -110,7 +110,6 @@ def user_a(requests):
         watchlistsymbols=""
         for i in user.watchlist["symbol"]:
             watchlistsymbols=i+","+watchlistsymbols
-        
         # print(watchlistsymbols)
         data={
             "username":user.username,
@@ -118,6 +117,7 @@ def user_a(requests):
             "email":user.email,
             "totalbalance":round(user.balance,2),
             "watchlist":watchlistsymbols,
+            "stocklist":user.watchlist["symbol"],
             "stock":list(stockname),
             "price":price,
             "start":today()-52000,
