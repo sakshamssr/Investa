@@ -80,7 +80,7 @@ def createuser(requests):
             return render(requests,"login/signup.html",data)
         
         if(ucount==0 and ecount==0):
-            adduser=users(username=uname,firstname=fname,lastname=lname,email=mail,password=pword,watchlist={"symbol":["sony","msft","meta","goog","aapl"]})
+            adduser=users(username=uname,firstname=fname,lastname=lname,email=mail,password=pword,watchlist={"symbol":["SONY","MSFT","META","GOOG","AAPL"]})
             adduser.save()
             return redirect("login")
     else:

@@ -8,6 +8,8 @@
     const start = "{{start|escapejs}}";
     const end = "{{end|escapejs}}";
 
+    console.log(symbol);
+
     var symbols = JSON.parse(symbol.replace(/'/g, '"'));
 
     // Function to fetch data for each symbol and combine it
@@ -49,6 +51,7 @@
     let chart;
     const initializeChart = (symbol, combinedData) => {
         const data = combinedData[symbol];
+        document.getElementById("watchstockprice").innerHTML=symbol
 
         const options = {
             xaxis: {
@@ -88,9 +91,9 @@
                 data: data
             }],
             chart: {
-                height: "83%",
+                height: "110%",
                 maxWidth: "100%",
-                type: "line",
+                type: "area",
                 fontFamily: "Inter, sans-serif",
                 dropShadow: {
                     enabled: false,
@@ -255,11 +258,11 @@
             <div class="w-full h-full bg-white rounded-lg shadow dark:bg-gray-800">
                 <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
                     <div>
-                        <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">${{totalbalance}}
+                        <h5 id="watchstockprice" class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">${{totalbalance}}
                         </h5>
                         <p class="text-base font-normal text-gray-500 dark:text-gray-400"></p>
                     </div>
-                    <div
+                    <!-- <div
                         class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
                         23%
                         <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -267,7 +270,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M5 13V1m0 0L1 5m4-4 4 4" />
                         </svg>
-                    </div>
+                    </div> -->
                 </div>
                 <div id="labels-chart" class="px-2.5"></div>
             </div>
@@ -474,141 +477,6 @@
 
     </script>
 
-    <!-- <script>
-        // Array of stock symbols to fetch data for
-        const symbol = "{{stock|escapejs}}";
-        const start = "{{start|escapejs}}"
-        const end = "{{end|escapejs}}"
-
-        var symbols = JSON.parse(symbol.replace(/'/g, '"'));
-
-        // Function to fetch data for each symbol and combine it
-        const fetchDataForSymbols = async () => {
-            // Array to store promises for each fetch operation
-            const promises = symbols.map(symbol => {
-                return fetch(`/api/graphdata/${symbol}/${start}/${end}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Process data for each symbol here
-                        return {
-                            symbol: symbol,
-                            data: data
-                        };
-                    });
-            });
-
-            // Wait for all fetch operations to complete
-            const results = await Promise.all(promises);
-
-            // Process and combine data for all symbols
-            const combinedData = results.reduce((acc, { symbol, data }) => {
-                // Combine data for each symbol as needed
-                acc.date = data.date;
-                acc[symbol] = data.close;
-                return acc;
-            }, { date: [] });
-
-            console.log(combinedData);
-            return combinedData;
-        };
-
-        // Fetch data for all symbols and render the chart
-        fetchDataForSymbols()
-            .then(combinedData => {
-                // Process combined data and render the chart
-                // console.log(combinedData);
-
-                // ApexCharts options and config (use combinedData for chart data)
-                let options = {
-                    // Set chart options using combinedData
-                    xaxis: {
-                        categories: combinedData.date,
-                        labels: {
-                            show: true,
-                            style: {
-                                fontFamily: "Inter, sans-serif",
-                                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
-                            }
-                        },
-                        axisBorder: {
-                            show: false,
-                        },
-                        axisTicks: {
-                            show: true,
-                        },
-                        tickAmount: {
-                            show: false,
-                        },
-                    },
-                    yaxis: {
-                        show: true,
-                        min: 0,
-                        labels: {
-                            show: true,
-                            style: {
-                                fontFamily: "Inter, sans-serif",
-                                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
-                            },
-                            formatter: function (value) {
-                                return '$' + value;
-                            }
-                        }
-                    },
-                    series: symbols.map(symbol => {
-                        return {
-                            name: symbol,
-                            data: combinedData[symbol]
-                        };
-                    }),
-                    chart: {
-                        height: "83%",
-                        maxWidth: "100%",
-                        type: "line",
-                        fontFamily: "Inter, sans-serif",
-                        dropShadow: {
-                            enabled: false,
-                        },
-                        toolbar: {
-                            show: false,
-                        },
-                    },
-                    tooltip: {
-                        enabled: true,
-                        x: {
-                            show: false,
-                        },
-                    },
-                    dataLabels: {
-                        enabled: false,
-                    },
-                    stroke: {
-                        width: 6,
-                    },
-                    grid: {
-                        show: true,
-                        strokeDashArray: 4,
-                        padding: {
-                            left: 2,
-                            right: 2,
-                            top: -26
-                        },
-                    },
-                };
-
-                if (document.getElementById("labels-chart") && typeof ApexCharts !== 'undefined') {
-                    const chart = new ApexCharts(document.getElementById("labels-chart"), options);
-                    chart.render();
-                }
-            })
-            .catch(error => {
-                console.error('There was a problem with fetching data:', error);
-            });
-    </script> -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             fetch(`/api/portfolio`)
