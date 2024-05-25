@@ -122,6 +122,7 @@ def user_a(requests):
             "price":price,
             "start":today()-52000,
             "end":today(),
+            "currentlyholding":"hidden",
         }
         return data
 
@@ -272,6 +273,7 @@ def user_portfolio(requests):
             "price":price,
             "start":today()-70000,
             "end":today(),
+            "currentlyholding":"hidden",
         }
         return render(requests,"main/portfolio.html",data)
     else:
@@ -311,4 +313,28 @@ def errorpage(requests):
 def settings(requests):
     if requests.user.is_authenticated:
         data = user_a(requests)
+        data["currentcheck"]="hidden"
+        data["matchcheck"]="hidden"
+        if requests.method == "POST":
+            currentPass=requests.POST.get("currentpassword")
+            newpass=requests.POST.get("newpassword")
+            repeatpass=requests.POST.get("repeat-password")
+            user = users.objects.first()
+            print("---------------------------------------")
+            print(user.password)
+            if (user.password == currentPass):
+                data["currentcheck"]="hidden"
+                if(newpass == repeatpass):
+                    data["matchcheck"]="hidden"
+                    user.password = newpass
+                    user.save()
+                else:
+                    print("Password Doesn't Match")
+                    data["matchcheck"]="visible"
+            else:
+                data["currentcheck"]="visible"
+                print("Password is Not Correct")
+            print(currentPass)
+            print(newpass)
+            print(repeatpass)
     return render(requests,"main/settings.html",data)

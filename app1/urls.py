@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import home,signup,user_login,createuser,logout,dashboard,stockdetails,removewatchlist,updatestocks,user_portfolio,errorpage,settings
 
-from .apis import search,watchlist,fetchdetails,graphdata,portfolio,portfoliochart,income
+from .apis import search,watchlist,fetchdetails,graphdata,portfolio,portfoliochart,income,holdings
 
 urlpatterns = [
     path('',home,name="home"),
@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/portfolio',portfolio,name="portfolio"),
     path('api/portfoliochart',portfoliochart,name="portfoliochart"),
     path('api/incomecalculate',income,name="income"),
+    path('api/holdings/<str:query>',holdings,name="holdings"),
 ]

@@ -169,3 +169,15 @@ def income(request):
         pl=currentamount-investedamount
         storepl=storepl+round(pl,2)
     return HttpResponse(round(storepl,2))
+
+def holdings(request,query):
+    logedInUser=users.objects.first()
+    stocks=logedInUser.stockbuy.keys()
+    if(query in list(stocks)):
+        # url="http://127.0.0.1:8000/api/watchlist/"+query
+        # headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
+        # response = requests.get(url,headers=headers)
+        # data = response.json()
+        return HttpResponse(logedInUser.stockbuy[query]["quantity"])
+    else:
+        return HttpResponse(0)
