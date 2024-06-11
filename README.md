@@ -23,6 +23,7 @@ Your Investa dashboard is your personal trading hub! Here's what it shows:
 * **Asset Allocations:** See how your investments are distributed across different assets.
 
 ![Home Page](images/dashboard.png)
+
 ## Details (Buy/Sell) Page
 This page allows users to monitor graphs and live stock prices, as well as buy and trade virtual stocks.
 The search page is your go-to for detailed stock information and trading. Here's what you can do:
@@ -32,4 +33,27 @@ The search page is your go-to for detailed stock information and trading. Here's
 * **Market Status:** Know whether the market is closed or open.
 * **Buy/Sell Stocks:** If you hold stocks, you can easily buy or sell directly from this page.
 * **Watchlist:** Add stocks to your watchlist for future tracking.
+
 ![Search Page](images/searchPage.png)
+
+## Run Locally 
+1. Clone the repository:
+```
+git clone https://github.com/sakshamssr/Investa.git
+```
+2. Navigate to the project directory:
+```
+cd Investa
+```
+3. Install dependencies:
+```
+pip install -r requirements.txt
+```
+4. Run the Django development server:
+```
+python manage.py runserver
+```
+5. Access the application by visiting http://localhost:8000 in your web browser.
+```
+http://localhost:8000
+```
