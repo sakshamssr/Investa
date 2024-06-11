@@ -100,14 +100,9 @@
             .then(data => {
                 console.log(data)
                 // Process the fetched data here
-                if(data>0){
-                    profitloss.classList.add("dark:text-green-500");
-                }
-                else{
-                    profitloss.classList.add("dark:text-red-500");
-                }
-                profitloss=document.getElementById("currentlyholding")
-                profitloss.innerHTML = data;
+
+                currentlyholding=document.getElementById("currentlyholding")
+                currentlyholding.innerHTML = data;
                 // document.getElementById("currentprice").value = currentPrice;
             })
             .catch(error => {
