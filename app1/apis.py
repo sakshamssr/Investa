@@ -106,6 +106,8 @@ def graphdata(request,query,start,end):
             store["close"].append(round(data["chart"]["result"][0]["indicators"]["quote"][0]["close"][i],2))
         except:
             continue
+    
+    store["currency"]=data["chart"]["result"][0]["meta"]["currency"]
     return JsonResponse(store)
 
 def portfolio(request):

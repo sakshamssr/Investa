@@ -4,7 +4,7 @@ from .views import home,signup,user_login,createuser,logout,dashboard,stockdetai
 from .apis import search,watchlist,fetchdetails,graphdata,portfolio,portfoliochart,income,holdings
 
 urlpatterns = [
-    path('',home,name="home"),
+    path('',dashboard,name="home"),
     path('signup',signup,name="signup"),
     path('login',user_login,name="login"),
     path('createuser',createuser,name="createuser"),
