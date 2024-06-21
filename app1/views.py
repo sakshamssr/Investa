@@ -129,6 +129,7 @@ def user_a(requests):
 def dashboard(requests):
     if requests.user.is_authenticated:
         data = user_a(requests)
+        data["title"]="Dashboard"
         return render(requests,"main/dashboard.html",data)
     else:
         return redirect("login")
@@ -173,6 +174,7 @@ def stockdetails(requests,query):
             "previousclose":previousclose,
             "start":start,
             "end":end,
+            "title":query,
         }
         return render(requests,"main/details.html",data)
     else:
@@ -180,11 +182,10 @@ def stockdetails(requests,query):
 
 def removewatchlist(requests,symbol):
     # print(symbol)
-    wlist={"symbol":["sony","msft","meta","goog","aapl"]}
-    wlist["symbol"].remove(symbol.lower())
-
     user = users.objects.first()
-    user.watchlist=wlist
+    user.watchlist["symbol"].remove(symbol)
+
+    # user.watchlist=wlist
 
     # remove=users(watchlist=wlist)
     user.save()
@@ -315,6 +316,7 @@ def settings(requests):
         data = user_a(requests)
         data["currentcheck"]="hidden"
         data["matchcheck"]="hidden"
+        data["title"]="Settings"
         if requests.method == "POST":
             currentPass=requests.POST.get("currentpassword")
             newpass=requests.POST.get("newpassword")

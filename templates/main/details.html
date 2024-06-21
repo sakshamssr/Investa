@@ -2,52 +2,9 @@
 
 {% block dashboard %}
 
-<style>
-    .credit-score-meter {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        background-image: conic-gradient(#e74c3c 0% 33%,
-                /* Red */
-                #f39c12 33% 66%,
-                /* Orange */
-                #2ecc71 66% 100%
-                /* Green */
-            );
-    }
-
-    .credit-score-inner-circle {
-        width: 70%;
-        height: 70%;
-        border-radius: 50%;
-        background-color: #ffffff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #000000;
-    }
-</style>
+{% load static %}
 
 <div class="bg-gray-900 border-gray-200 dark:bg-gray-900">
-    <!-- <div class="container mx-auto py-2 flex items-center justify-center">
-        <div class="text-center flex-1">
-            <h2 class="text-4xl font-semibold mb-4 dark:text-white">{{name}}</h2>
-        </div>
-        <div class="credit-score-meter mx-4">
-            <div class="credit-score-inner-circle dark:bg-gray-900 dark:text-white">
-                {{data.rating}} <!-- Replace with the actual credit score --
-            </div>
-        </div>
-    </div> -->
-
-
     <div class="flex flex-col md:flex-row">
         <div class="flex-1">
             <div class="mx-4 my-4 bg-gray-900 rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
@@ -82,10 +39,33 @@
         </div>
         <div class="flex-3 pt-4">
             <div class="flex flex-col">
-                <button type="button"
+                <button type="submit" name="addtowatchlist" onclick="addwatchlist()"
                     class="text-white bg-[#2557D6] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#2557D6]/50 me-2 mb-2 justify-center">
                     Add to WatchList.
                 </button>
+                <div id="alert-2"
+                    class="hidden flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                    role="alert">
+                    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div class="ms-3 text-sm font-medium" id="alert-text">
+                        Don't have enough Funds.
+                    </div>
+                    <button type="button"
+                        class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+                        data-dismiss-target="#alert-2" aria-label="Close">
+                        <span class="sr-only">Close</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <tbody>
@@ -103,8 +83,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="alert-2"
-                    class="{{isvisible}} hidden flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                <!-- <div id="alert-2"
+                    class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
                     role="alert">
                     <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor" viewBox="0 0 20 20">
@@ -125,7 +105,7 @@
                                 d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                     </button>
-                </div>
+                </div> -->
                 <form id="updatestocksform" action="{% url 'updatestocks' %}" method="post">
                     {% csrf_token %}
                     <div class="flex flex-row justify-center pt-2 ">
@@ -177,6 +157,32 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    function addwatchlist(){
+        var watchquery = "{{query}}";
+        fetch(`/api/addtowatchlist/${watchquery}`).then(response => {
+            if(!response.ok){
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data)
+            var alert = document.getElementById("alert-2")
+            if(data["response"]=="Already Exists"){
+                console.log("Already")
+                document.getElementById("alert-text").textContent = "Already Exists in your Watchlist.";
+                alert.classList.remove('hidden');
+            }
+            else{
+                document.getElementById("alert-text").textContent = "Added to your Watchlist";
+                alert.classList.remove('hidden');
+                alert.classList.remove("dark:text-red-400","text-red-400")
+                alert.classList.add("dark:text-green-400")
+            }
+        })
+    }
+</script>
 <script>
     function fetchData() {
         var watchquery = "{{query}}";

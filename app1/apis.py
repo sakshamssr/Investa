@@ -183,3 +183,16 @@ def holdings(request,query):
         return HttpResponse(logedInUser.stockbuy[query]["quantity"])
     else:
         return HttpResponse(0)
+    
+def addtoWatchlist(request,query):
+    logedInUser=users.objects.first()
+    watchlist=logedInUser.watchlist
+    print(watchlist)
+    print(query)
+    if(query in watchlist["symbol"]):
+        print("Already Exists")
+        return JsonResponse({"response":"Already Exists"})
+    else:
+        watchlist["symbol"].append(query)
+        logedInUser.save()
+        return JsonResponse({"response":"Added "+query})
