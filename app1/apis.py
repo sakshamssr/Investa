@@ -92,6 +92,9 @@ def fetchdetails(request, query):
     return JsonResponse(store)
 
 def graphdata(request,query,start,end):
+    # print("--------------------------------")
+    # print(query,start,end)
+    # print("--------------------------------")
     url="https://query2.finance.yahoo.com/v8/finance/chart/"+query+"?period1="+str(start)+"&period2="+str(end)+"&interval=5m&includePrePost=true&events=div%7Csplit%7Cearn&&lang=en-US&region=US"
     headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
     print(url)
@@ -173,8 +176,13 @@ def income(request):
     return HttpResponse(round(storepl,2))
 
 def holdings(request,query):
+    # print("---------------Holdings-----------------")
+    # print(query)
+    # print("---------------Holdings-----------------")
     logedInUser=users.objects.first()
     stocks=logedInUser.stockbuy.keys()
+    print(logedInUser)
+    print(stocks)
     if(query in list(stocks)):
         # url="http://127.0.0.1:8000/api/watchlist/"+query
         # headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}

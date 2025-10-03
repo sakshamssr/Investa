@@ -8,12 +8,7 @@
     <link rel="shortcut icon" type="image/jpg" href="https://flowbite.com/docs/images/logo.svg" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
     <script>
-      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-      if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
+      document.documentElement.classList.add('dark');
       document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('search-navbar');
 

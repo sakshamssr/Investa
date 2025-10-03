@@ -120,7 +120,7 @@ def user_a(requests):
             "stocklist":user.watchlist["symbol"],
             "stock":list(stockname),
             "price":price,
-            "start":today()-52000,
+            "start":today()-200000,
             "end":today(),
             "currentlyholding":"hidden",
         }
@@ -129,7 +129,11 @@ def user_a(requests):
 def dashboard(requests):
     if requests.user.is_authenticated:
         data = user_a(requests)
+
         data["title"]="Dashboard"
+        print("---------------Data-----------------")
+        print(data)
+        print("---------------Data-----------------")
         return render(requests,"main/dashboard.html",data)
     else:
         return redirect("login")

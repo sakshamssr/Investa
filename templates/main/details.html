@@ -7,8 +7,8 @@
 <div class="bg-gray-900 border-gray-200 dark:bg-gray-900">
     <div class="flex flex-col md:flex-row">
         <div class="flex-1">
-            <div class="mx-4 my-4 bg-gray-900 rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-                <div class="flex justify-between">
+            <div class="mx-4 my-4 bg-gray-900 rounded-lg shadow dark:bg-gray-800 ms:p-6">
+                <div class="flex justify-between p-4 pb-0">
                     <div>
                         <h5 id="currentPrice"
                             class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Current Price:
@@ -31,7 +31,7 @@
                         </svg>
                     </div>
                 </div>
-                <div id="labels-chart" class="px-2.5"></div>
+                <div id="labels-chart" class="p-2"></div>
             </div>
             <div>
 
@@ -300,7 +300,7 @@
                         enabled: false,
                     },
                     toolbar: {
-                        show: false,
+                        show: true,
                     },
                 },
                 tooltip: {
@@ -322,13 +322,20 @@
                     enabled: false,
                 },
                 stroke: {
-                    width: 6,
+                    width: 2,
                 },
                 legend: {
-                    show: false
+                    show: true
                 },
                 grid: {
-                    show: false,
+                    show: true,
+                    strokeDashArray: 4,
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 0,
+                        bottom: 2
+                    },
                 },
             }
 

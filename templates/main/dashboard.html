@@ -57,7 +57,7 @@
             xaxis: {
                 categories: combinedData.date,
                 labels: {
-                    show: true,
+                    show: false,
                     style: {
                         fontFamily: "Inter, sans-serif",
                         cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
@@ -67,7 +67,7 @@
                     show: false,
                 },
                 axisTicks: {
-                    show: true,
+                    show: false,
                 },
                 tickAmount: {
                     show: false,
@@ -84,14 +84,14 @@
                     formatter: function (value) {
                         return '$' + value;
                     }
-                }
+                },
             },
             series: [{
                 name: symbol,
                 data: data
             }],
             chart: {
-                height: "110%",
+                height: 320,
                 maxWidth: "100%",
                 type: "area",
                 fontFamily: "Inter, sans-serif",
@@ -99,7 +99,7 @@
                     enabled: false,
                 },
                 toolbar: {
-                    show: false,
+                    show: true,
                 },
             },
             tooltip: {
@@ -112,15 +112,16 @@
                 enabled: false,
             },
             stroke: {
-                width: 6,
+                width: 2,
             },
             grid: {
                 show: true,
                 strokeDashArray: 4,
                 padding: {
-                    left: 2,
-                    right: 2,
-                    top: -26
+                    left: 10,
+                    right: 10,
+                    top: 0,
+                    bottom: 2
                 },
             },
         };
@@ -217,14 +218,14 @@
 
 <div class="p-4 border-2 border-gray-200 border-line dark:border-gray-700">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <div class="flex h-96 w-full rounded bg-gray-50 dark:bg-gray-800 col-span-1 pl-2">
-            <div class="flex flex-col h-full pt-2">
+        <div class="flex items-center justify-center h-full w-full rounded bg-gray-50 dark:bg-gray-800 sm:col-span-2 col-span-1 pl-2 pb-2 pr-2">
+            <div class="flex flex-col h-full w-full pt-2">
                 <div class="flex items-center h-1/3 w-full dark:bg-gray-800 pl-2">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Your WatchList:
                     </h5>
                     <!-- <p class="font-normal text-xl text-gray-700 dark:text-gray-300">: {{name}}</p> -->
                 </div>
-                <div class="flex items-center justify-center h-96 w-96">
+                <div class="flex items-center justify-center h-full w-full">
                     <div class=" h-80 overflow-x-auto shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
@@ -254,7 +255,7 @@
             </div>
 
         </div>
-        <div class="flex items-center justify-center h-96 w-full rounded bg-gray-50 dark:bg-gray-800 col-span-2">
+        <div class="flex items-center justify-center h-full w-full rounded bg-gray-50 dark:bg-gray-800 col-span-2">
             <div class="w-full h-full bg-white rounded-lg shadow dark:bg-gray-800">
                 <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
                     <div>
@@ -272,20 +273,20 @@
                         </svg>
                     </div> -->
                 </div>
-                <div id="labels-chart" class="px-2.5"></div>
+                <div id="labels-chart" class=" w-full h-full px-2.5"></div>
             </div>
 
         </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    <div class="grid grid-cols-1 h-full md:grid-cols-3 gap-4 mb-4">
         <div class="flex h-96 w-full rounded bg-gray-50 dark:bg-gray-800 col-span-2 pl-2">
-            <div class="flex flex-col h-full pt-2">
+            <div class="flex flex-col h-80 w-full pt-2">
                 <div class="flex h-1/3 w-full dark:bg-gray-800 pl-2">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Portfolio Overview
                         :</h5>
                     <!-- <p class="font-normal text-xl text-gray-700 dark:text-gray-300">: {{name}}</p> -->
                 </div>
-                <div class="flex items-center justify-center h-full w-full">
+                <div class="flex items-center justify-center h-full w-full pr-2">
 
 
                     <div class="h-full overflow-x-auto shadow-md sm:rounded-lg">
@@ -327,9 +328,9 @@
         </div>
         <div class="flex items-center justify-center h-96 w-full rounded bg-gray-50 dark:bg-gray-800 col-span-1">
 
-            <div class="max-w-sm h-96 w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+            <div class="max-w-sm h-full w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
 
-                <div class="flex justify-between mb-3">
+                <div class="flex flex-col justify-between mb-3">
                     <div class="flex justify-center items-center">
                         <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white pe-1">Assets Allocation
                         </h5>
@@ -365,10 +366,9 @@
                     </div>
                     <div>
                     </div>
+                    <!-- Donut Chart -->
+                    <div class="py-2" id="donut-chart"></div>
                 </div>
-
-                <!-- Donut Chart -->
-                <div class="py-6" id="donut-chart"></div>
             </div>
 
         </div>
