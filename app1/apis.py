@@ -114,7 +114,7 @@ def graphdata(request,query,start,end):
     return JsonResponse(store)
 
 def portfolio(request):
-    user=users.objects.first()
+    user=request.user
     stocks=user.stockbuy
     name=list(stocks.keys())
     print(name[0])
@@ -138,8 +138,8 @@ def portfolio(request):
     
     return JsonResponse(store,safe=False)
 
-def portfoliochart(requests):
-    user=users.objects.first()
+def portfoliochart(request):
+    user=request.user
     stocks=user.stockbuy
     price=[]
     name=list(stocks.keys())
@@ -150,7 +150,7 @@ def portfoliochart(requests):
     return JsonResponse(store)
 
 def income(request):
-    user=users.objects.first()
+    user=request.user
     stocks=user.stockbuy
     price=[]
     name=list(stocks.keys())
@@ -179,7 +179,7 @@ def holdings(request,query):
     # print("---------------Holdings-----------------")
     # print(query)
     # print("---------------Holdings-----------------")
-    logedInUser=users.objects.first()
+    logedInUser=request.user
     stocks=logedInUser.stockbuy.keys()
     print(logedInUser)
     print(stocks)
@@ -193,7 +193,7 @@ def holdings(request,query):
         return HttpResponse(0)
     
 def addtoWatchlist(request,query):
-    logedInUser=users.objects.first()
+    logedInUser=request.user
     watchlist=logedInUser.watchlist
     print(watchlist)
     print(query)

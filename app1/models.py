@@ -10,10 +10,10 @@ class users(AbstractUser):
     password=models.CharField(max_length=128,default=0000)
     datajoined=models.DateTimeField(auto_now_add=True)
     balance=models.FloatField(default=10000.0)
-    stockbuy=models.JSONField(default=list)
-    stocksold=models.JSONField(default=list)
-    watchlist=models.JSONField(default=list)
-    cache=models.JSONField(default=list)
+    stockbuy=models.JSONField(default=dict)
+    stocksold=models.JSONField(default=dict)
+    watchlist=models.JSONField(default=dict)
+    cache=models.JSONField(default=dict)
 
     def __str__(self):
         return self.username

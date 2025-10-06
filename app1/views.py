@@ -96,8 +96,11 @@ def logout(requests):
 
 def user_a(requests):
     if requests.user.is_authenticated:
-        user = users.objects.first()
+        user = requests.user
+        print("--------User--------")
+        print(user)
         stockname=user.stockbuy.keys()
+        print(stockname)
         stock=[]
         price=[]
         for i in stockname:
@@ -186,7 +189,7 @@ def stockdetails(requests,query):
 
 def removewatchlist(requests,symbol):
     # print(symbol)
-    user = users.objects.first()
+    user = requests.user
     user.watchlist["symbol"].remove(symbol)
 
     # user.watchlist=wlist
@@ -205,7 +208,7 @@ def updatestocks(requests):
         currentprice=float(requests.POST.get("currentprice"))
         print(currentprice)
         if "buy" in requests.POST:
-            user = users.objects.first()
+            user = requests.user
             if(quantity==0):
                 return render(requests,"main/error.html")
                 # return redirect("Quantity Can not be 0")
@@ -226,7 +229,7 @@ def updatestocks(requests):
             user.save()
             print("Buy")
         if "sell" in requests.POST:
-            user=users.objects.first()
+            user=requests.user
             if (name in user.stockbuy.keys()):
                 if quantity > user.stockbuy[name]["quantity"]:
                     return render(requests,"main/error.html")
@@ -252,7 +255,7 @@ def updatestocks(requests):
 def user_portfolio(requests):
 
     if requests.user.is_authenticated:
-        user = users.objects.first()
+        user = requests.user
         stockname=user.stockbuy.keys()
         stock=[]
         price=[]
@@ -286,7 +289,7 @@ def user_portfolio(requests):
 
 def errorpage(requests):
     if requests.user.is_authenticated:
-        user = users.objects.first()
+        user = requests.user
         stockname=user.stockbuy.keys()
         stock=[]
         price=[]
@@ -325,7 +328,7 @@ def settings(requests):
             currentPass=requests.POST.get("currentpassword")
             newpass=requests.POST.get("newpassword")
             repeatpass=requests.POST.get("repeat-password")
-            user = users.objects.first()
+            user = requests.user
             print("---------------------------------------")
             print(user.password)
             if (user.password == currentPass):
