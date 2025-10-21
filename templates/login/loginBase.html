@@ -4,33 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ODT | {{title}}</title>
+    <title>Investa | {{title}}</title>
     <link rel="shortcut icon" type="image/jpg" href="https://i.ibb.co/12G4C4B/bull.png" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
     <script>
-        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.add('dark')
-        }
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('search-navbar');
-
-            if (searchInput) {
-                searchInput.addEventListener('keydown', function (event) {
-                    if (event.key === 'Enter') {
-                        // Retrieve the search term
-                        const searchTerm = searchInput.value.trim();
-
-                        // Perform your desired action, e.g., redirect to a search results page
-                        if (searchTerm) {
-                            window.location.href = `/search/${encodeURIComponent(searchTerm)}`;
-                        }
-                    }
-                });
-            }
-        });
+        document.documentElement.classList.add('dark');
     </script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
 </head>
@@ -47,23 +25,11 @@
                 <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Investa Logo" />
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Investa</span>
             </a>
-            <div class="flex md:order-1">
+            <!-- <div class="flex md:order-1">
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Stock Market
                     Simulator</span>
-            </div>
-            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-search">
-                <div class="relative mt-3 md:hidden">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
-                    </div>
-                    <input type="text" id="search-navbar"
-                        class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Search...">
-                </div>
+            </div> -->
+            <div class="flex items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-search">
                 <ul
                     class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-gray-900 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li>
@@ -84,19 +50,21 @@
                             class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Learn</a>
                     </li>
                 </ul>
-                <li>
-                    <a href="/login">
-                        <button type="button"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Login
-                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M1 5h12m0 0L9 1m4 4L9 9" />
-                            </svg>
-                        </button>
-                    </a>
-                </li>
+                <div class="flex pl-2">
+                    <ul>
+                        <a href="/{{ login_signup }}">
+                            <button type="button"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                {{ logintext }}
+                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                </svg>
+                            </button>
+                        </a>
+                    </ul>
+                </div>
             </div>
         </div>
         <hr class="border-gray-200 sm:mx-auto dark:border-gray-700" />
@@ -115,7 +83,7 @@
             <div class="md:flex md:justify-between">
                 <div class="mb-6 md:mb-0">
                     <a href="/" class="flex items-center">
-                        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8 me-3" alt="ODT Logo" />
+                        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8 me-3" alt="Investa Logo" />
                         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Investa</span>
                     </a>
                 </div>
@@ -167,12 +135,12 @@
                             <li class="mb-4">
                                 <a href="https://github.com/sakshamssr" class="hover:underline">Saksham Singh</a>
                             </li>
-                            <li class="mb-4">
+                            <!-- <li class="mb-4">
                                 <a href="https://github.com/sakshamssr" class="hover:underline">Rishabh Giri</a>
                             </li>
                             <li class="mb-4">
                                 <a href="https://github.com/sakshamssr" class="hover:underline">Suraj Verma</a>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </div>

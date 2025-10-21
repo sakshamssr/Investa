@@ -7,11 +7,54 @@ import requests as req
 from .mdate import today
 
 # Create your views here.
+
+def topchart():
+    store={}
+
+    URL="https://markets.businessinsider.com/ajax/finanzen/api/commodities?urls=gold-price,oil-price"
+    headers={"User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"}
+
+    page = req.get(URL,headers=headers)
+    data = page.json()
+
+    return data
+
 def home(requests):
-    return HttpResponse("Hello World!!")
+    top=topchart()
+
+    topbonds=req.get("https://finance-api-ssr.vercel.app/topbonds").json()
+    print(topbonds)
+
+    topcolor=[]
+
+    for i in range(0,len(top)):
+        topcolor.append(top[i]["Quotes"][0])
+
+    for i in range(0,len(topcolor)):
+        if(topcolor[i]["ChangePercent"]) > 0:
+            topcolor[i]["color"]="green"
+            topcolor[i]["name"]=top[i]["Name"].capitalize()
+            topcolor[i]["transform"]=""
+        else:
+            topcolor[i]["color"]="red"
+            topcolor[i]["name"]=top[i]["Name"].capitalize()
+            topcolor[i]["transform"]=" rotate-180"
+    
+    #print(topcolor)
+    news=[]
+
+    dataJson={
+        "title":"Welcome",
+        "topc":topcolor,
+        "topbonds":topbonds,
+        "login_signup":"signup",
+        "logintext":"Sign Up"
+    }
+    #print(dataJson["news1"])
+    return render(requests,"home/home.html",dataJson)
 
 def signup(requests):
-    data={"isusername":"hidden","isemail":"hidden"}
+    data={"isusername":"hidden","isemail":"hidden", "login_signup":"login", "logintext":"Login"}
     return render(requests,"login/signup.html",data)
 
 def user_login(requests):
@@ -30,7 +73,7 @@ def user_login(requests):
         iscorrectpword=checkusername(uname)
     
         if(iscorrectpword==0):
-            data={"isusername":"visible","ispasswordcorrect":"hidden"}
+            data={"isusername":"visible","ispasswordcorrect":"hidden", "login_signup":"signup", "logintext":"Sign Up"}
             return render(requests,"login/login.html",data)
         else:
             if(iscorrectpword==pword):
@@ -41,10 +84,10 @@ def user_login(requests):
                 auth_login(requests,users.objects.get(username=uname))
                 return redirect("dashboard")
             else:
-                data={"isusername":"hidden","ispasswordcorrect":"visible"}
+                data={"isusername":"hidden","ispasswordcorrect":"visible", "login_signup":"signup", "logintext":"Sign Up"}
                 return render(requests,"login/login.html",data)
     
-    data={"isusername":"hidden","ispasswordcorrect":"hidden"}
+    data={"isusername":"hidden","ispasswordcorrect":"hidden", "login_signup":"signup", "logintext":"Sign Up"}
     return render(requests,"login/login.html",data)
 
 def createuser(requests):
@@ -69,14 +112,14 @@ def createuser(requests):
         ecount=checkemail(mail)
         
         if(ucount==1 and ecount==1):
-            data={"isusername":"visible","isemail":"visible"}
+            data={"isusername":"visible","isemail":"visible", "login_signup":"login", "logintext":"Login"}
             return render(requests,"login/signup.html",data)
 
         if(ucount==1):
-            data={"isusername":"visible","isemail":"hidden"}
+            data={"isusername":"visible","isemail":"hidden", "login_signup":"login", "logintext":"Login"}
             return render(requests,"login/signup.html",data)
         elif(ecount==1):
-            data={"isusername":"hidden","isemail":"visible"}
+            data={"isusername":"hidden","isemail":"visible", "login_signup":"login", "logintext":"Login"}
             return render(requests,"login/signup.html",data)
         
         if(ucount==0 and ecount==0):
