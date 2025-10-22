@@ -22,9 +22,6 @@ def topchart():
 def home(requests):
     top=topchart()
 
-    topbonds=req.get("https://finance-api-ssr.vercel.app/topbonds").json()
-    print(topbonds)
-
     topcolor=[]
 
     for i in range(0,len(top)):
@@ -46,7 +43,6 @@ def home(requests):
     dataJson={
         "title":"Welcome",
         "topc":topcolor,
-        "topbonds":topbonds,
         "login_signup":"signup",
         "logintext":"Sign Up"
     }
@@ -136,6 +132,10 @@ def createuser(requests):
 def logout(requests):
     auth_logout(requests)
     return HttpResponse("Logout!!")
+
+
+def transactionHistory(requests):
+    return render(requests,'main/tHistory.html')
 
 def user_a(requests):
     if requests.user.is_authenticated:

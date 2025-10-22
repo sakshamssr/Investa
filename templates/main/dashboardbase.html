@@ -32,7 +32,7 @@
 
                         // Create a hyperlink element with dynamically fetched link
                         const link = document.createElement('a');
-                        link.href = "/details/"+stock.symbol; // Assuming 'link' is the key in the API response containing the link
+                        link.href = "/details/" + stock.symbol; // Assuming 'link' is the key in the API response containing the link
                         link.textContent = stock.symbol + ' ' + stock.shortname;
 
                         // Append the hyperlink element to the result item
@@ -64,14 +64,14 @@
             .then(data => {
                 console.log(data)
                 // Process the fetched data here
-                if(data>0){
+                if (data > 0) {
                     profitloss.classList.add("dark:text-green-500");
                 }
-                else{
+                else {
                     profitloss.classList.add("dark:text-red-500");
                 }
-                profitloss=document.getElementById("profitloss")
-                profitloss.innerHTML = "&#36; "+ data;
+                profitloss = document.getElementById("profitloss")
+                profitloss.innerHTML = "&#36; " + data;
                 // document.getElementById("currentprice").value = currentPrice;
             })
             .catch(error => {
@@ -101,7 +101,7 @@
                 console.log(data)
                 // Process the fetched data here
 
-                currentlyholding=document.getElementById("currentlyholding")
+                currentlyholding = document.getElementById("currentlyholding")
                 currentlyholding.innerHTML = data;
                 // document.getElementById("currentprice").value = currentPrice;
             })
@@ -205,20 +205,23 @@
                 class="block max-w-sm p-4 px-6 pl-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:hover:bg-gray-700">
 
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Profit / Loss:</h5>
-                <p id="profitloss" class="font-normal text-xl text-gray-700 dark:text-gray-300">&#36; {{totalbalance}}</p>
+                <p id="profitloss" class="font-normal text-xl text-gray-700 dark:text-gray-300">&#36; {{totalbalance}}
+                </p>
             </a>
 
-            <div class="block max-w-sm p-4 px-6 pl-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700">
+            <div
+                class="block max-w-sm p-4 px-6 pl-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700">
 
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Market Status :</h5>
                 <p class="font-normal text-xl text-gray-700 dark:text-gray-300" id="marketstatus"></p>
-        </div>
+            </div>
 
-            <div class=" {{currentlyholding}} block max-w-sm p-4 px-6 pl-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700">
+            <div
+                class=" {{currentlyholding}} block max-w-sm p-4 px-6 pl-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700">
 
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Holdings :</h5>
                 <p class="font-normal text-xl text-gray-700 dark:text-gray-300" id="currentlyholding"></p>
-        </div>
+            </div>
 
             <li>
                 <a href="/dashboard"
@@ -247,10 +250,23 @@
                 </a>
             </li>
             <li>
+                <a href="{% url 'tHistory' %}"
+                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                    <path
+                        d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z" />
+                </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Transaction History</span>
+                </a>
+            </li>
+            <li>
                 <a href="{% url 'settings' %}"
                     class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg class="w-6 h-6 text-gray-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.75 4H19M7.75 4a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 4h2.25m13.5 6H19m-2.25 0a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 10h11.25m-4.5 6H19M7.75 16a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 16h2.25"/>
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7.75 4H19M7.75 4a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 4h2.25m13.5 6H19m-2.25 0a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 10h11.25m-4.5 6H19M7.75 16a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 16h2.25" />
                     </svg>
                     <span class="flex-1 ms-3 whitespace-nowrap">Settings</span>
                 </a>

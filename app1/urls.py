@@ -16,6 +16,7 @@ urlpatterns = [
     path('updatestocks',views.updatestocks,name="updatestocks"),
     path('errorpage',views.errorpage,name="errorpage"),
     path('settings',views.settings,name="settings"),
+    path('transactionHistory',views.transactionHistory,name="tHistory"),
     path('api/search/<str:query>',search,name="search"),
     path('api/watchlist/<str:query>',watchlist,name="watchlist"),
     path('api/addtowatchlist/<str:query>',addtoWatchlist,name="addtoWatchlist"),
