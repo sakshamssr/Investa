@@ -15,67 +15,42 @@
                     Quantity
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Action
+                    Price
+                </th><th scope="col" class="px-6 py-3">
+                    Date
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Price
-                <!-- </th>
+                    Action
+                </th>
+                <!--
                 <th scope="col" class="px-6 py-3">
                     <span class="sr-only">Edit</span>
                 </th> -->
             </tr>
         </thead>
         <tbody>
+            {% for x in hdata %}
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    AAPL
+                    {{x.stocknames}}
                 </th>
                 <td class="px-6 py-4">
-                    1
+                    {{x.quantity}}
                 </td>
                 <td class="px-6 py-4">
-                    Buy
+                    {{x.price}}
                 </td>
                 <td class="px-6 py-4">
-                    $2999
+                    {{x.time}}
+                </td>
+                <td class="px-6 py-4">
+                    {{x.action}}
                 </td>
                 <!-- <td class="px-6 py-4 text-right">
                     <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                 </td> -->
             </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    AAPL
-                </th>
-                <td class="px-6 py-4">
-                    1
-                </td>
-                <td class="px-6 py-4">
-                    Sell
-                </td>
-                <td class="px-6 py-4">
-                    $1999
-                </td>
-                <!-- <td class="px-6 py-4 text-right">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td> -->
-            </tr>
-            <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    AAPL
-                </th>
-                <td class="px-6 py-4">
-                    1
-                </td>
-                <td class="px-6 py-4">
-                    Buy
-                </td>
-                <td class="px-6 py-4">
-                    $2999
-                </td>
-                <!-- <td class="px-6 py-4 text-right">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td> -->
+            {% endfor %}
             </tr>
         </tbody>
     </table>

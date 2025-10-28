@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from .mdate import todaydate
 
 # Create your models here.
 class users(AbstractUser):
@@ -17,3 +18,11 @@ class users(AbstractUser):
 
     def __str__(self):
         return self.username
+
+class transactions(models.Model):
+    username = models.ForeignKey(users, on_delete=models.CASCADE)
+    stocknames = models.CharField(max_length=25)
+    quantity = models.IntegerField()
+    action = models.CharField(max_length=7)
+    time = models.DateField(default=todaydate)
+    price = models.FloatField(max_length=25.00)

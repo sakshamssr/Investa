@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse,redirect
-from .models import users
+from .models import users, transactions
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -135,9 +135,15 @@ def logout(requests):
 
 
 def transactionHistory(requests):
-    return render(requests,'main/tHistory.html')
+    # Transaction History page on dashboard
+    # temp = transactions.objects.create(stocknames = "AAPL", quantity = 1, action = "buy", price = 268.4, username_id = requests.user)
+    temp = transactions.objects.filter(username_id = requests.user)
+    print("Transaction: ",temp[0].username_id)
+    data = {"hdata": temp}
+    return render(requests,'main/tHistory.html',data)
 
 def user_a(requests):
+    #Gets logged in user details from database
     if requests.user.is_authenticated:
         user = requests.user
         print("--------User--------")
