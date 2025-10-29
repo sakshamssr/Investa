@@ -137,8 +137,9 @@ def logout(requests):
 def transactionHistory(requests):
     # Transaction History page on dashboard
     # temp = transactions.objects.create(stocknames = "AAPL", quantity = 1, action = "buy", price = 268.4, username_id = requests.user)
+    # Gets all the transaction history for the logged in user
     temp = transactions.objects.filter(username_id = requests.user)
-    print("Transaction: ",temp[0].username_id)
+    # print("Transaction: ",temp[0].username_id)
     data = {"hdata": temp}
     return render(requests,'main/tHistory.html',data)
 
@@ -271,11 +272,17 @@ def updatestocks(requests):
                 averageprice=(previousprice+currentshareprice)/totalquantity
                 user.stockbuy[name]={"quantity":totalquantity, "boughtat":currentprice, "averageprice":averageprice,"purchaseat":"date" }
                 user.balance=user.balance-float(quantity*currentprice)
+                # Add data to the transaction History table in database
+                transactions.objects.create(stocknames = name, quantity = quantity, action = "buy", price = currentprice, username_id = requests.user)
+
             else:
             # user.stockbuy={}
                 user.stockbuy[name]={"quantity": quantity ,"boughtat": currentprice, "averageprice": currentprice,"purchaseat":"date" }
                 user.balance=user.balance-float(quantity*currentprice)
+                # Add data to the transaction History table in database
+                transactions.objects.create(stocknames = name, quantity = quantity, action = "buy", price = currentprice, username_id = requests.user)
             user.save()
+            transactions.save()
             print("Buy")
         if "sell" in requests.POST:
             user=requests.user
@@ -287,11 +294,17 @@ def updatestocks(requests):
                     print("Here")
                     user.stockbuy.pop(name)
                     user.balance=user.balance+(currentprice*quantity)
+                    # Add data to the transaction History table in database
+                    transactions.objects.create(stocknames = name, quantity = quantity, action = "sell", price = currentprice, username_id = requests.user)
                     user.save()
+                    transactions.save()
                 else:
                     user.stockbuy[name].update({"quantity":user.stockbuy[name]["quantity"]-quantity})
                     user.balance=user.balance+(currentprice*quantity)
+                    # Add data to the transaction History table in database
+                    transactions.objects.create(stocknames = name, quantity = quantity, action = "sell", price = currentprice, username_id = requests.user)
                     user.save()
+                    transactions.save()
                     print("Sell")
             else:
                 print("Quantity is 0")
