@@ -259,7 +259,7 @@ def updatestocks(requests):
         print(currentprice)
         if "buy" in requests.POST:
             user = requests.user
-            if(quantity==0):
+            if(quantity<=0):
                 return render(requests,"main/error.html")
                 # return redirect("Quantity Can not be 0")
             if(currentprice*quantity)>user.balance:
@@ -274,6 +274,7 @@ def updatestocks(requests):
                 user.balance=user.balance-float(quantity*currentprice)
                 # Add data to the transaction History table in database
                 transactions.objects.create(stocknames = name, quantity = quantity, action = "buy", price = currentprice, username_id = requests.user)
+                # transactions.save()
 
             else:
             # user.stockbuy={}
@@ -281,8 +282,8 @@ def updatestocks(requests):
                 user.balance=user.balance-float(quantity*currentprice)
                 # Add data to the transaction History table in database
                 transactions.objects.create(stocknames = name, quantity = quantity, action = "buy", price = currentprice, username_id = requests.user)
+                # transactions.save()
             user.save()
-            transactions.save()
             print("Buy")
         if "sell" in requests.POST:
             user=requests.user
