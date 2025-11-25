@@ -28,14 +28,17 @@ def home(requests):
         topcolor.append(top[i]["Quotes"][0])
 
     for i in range(0,len(topcolor)):
-        if(topcolor[i]["ChangePercent"]) > 0:
-            topcolor[i]["color"]="green"
-            topcolor[i]["name"]=top[i]["Name"].capitalize()
-            topcolor[i]["transform"]=""
-        else:
-            topcolor[i]["color"]="red"
-            topcolor[i]["name"]=top[i]["Name"].capitalize()
-            topcolor[i]["transform"]=" rotate-180"
+        try:
+            if(topcolor[i]["ChangePercent"]) > 0:
+                topcolor[i]["color"]="green"
+                topcolor[i]["name"]=top[i]["Name"].capitalize()
+                topcolor[i]["transform"]=""
+            else:
+                topcolor[i]["color"]="red"
+                topcolor[i]["name"]=top[i]["Name"].capitalize()
+                topcolor[i]["transform"]=" rotate-180"
+        except:
+            continue
     
     #print(topcolor)
     news=[]

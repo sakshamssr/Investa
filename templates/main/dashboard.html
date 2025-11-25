@@ -414,7 +414,7 @@
                                                 const sum = w.globals.seriesTotals.reduce((a, b) => {
                                                     return a + b
                                                 }, 0)
-                                                return '$' + sum
+                                                return '$' + sum.toFixed(2);
                                             },
                                         },
                                         value: {
@@ -507,7 +507,7 @@
 
                         const averagePriceCell = document.createElement('td');
                         averagePriceCell.className = 'px-6 py-4';
-                        averagePriceCell.textContent = stock.averageprice[0]; // Assuming averageprice is always a list with one element
+                        averagePriceCell.textContent = stock.averageprice[0].toFixed(2); // Assuming averageprice is always a list with one element
 
                         const currentPriceCell = document.createElement('td');
                         currentPriceCell.className = 'px-6 py-4';
